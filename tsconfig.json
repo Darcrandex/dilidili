@@ -20,6 +20,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
+    "types": ["node", "electron"],
+
     "baseUrl": ".",
     "paths": { "@src/*": ["src/*"], "@electron/*": ["electron/*"] }
   },
