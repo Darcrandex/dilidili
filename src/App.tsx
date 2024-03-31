@@ -5,10 +5,10 @@
  */
 
 import { Suspense } from 'react'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RouterProvider, createHashRouter } from 'react-router-dom'
 import { routes } from './routes'
 
-const router = createBrowserRouter(routes)
+const router = createHashRouter(routes)
 
 export default function App() {
   return (
