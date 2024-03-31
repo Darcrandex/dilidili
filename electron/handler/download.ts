@@ -4,22 +4,24 @@
 // 下载封面
 
 import { globalStore } from '@electron/common/global-store'
-import { FILE_ROOT_PATH_NAME, REFERER, SESSION_KEY } from '@electron/const'
+import { REFERER, STORAGE_ROOT_PATH_KEY, STORAGE_SESSION_KEY } from '@electron/const'
 import { HandleChannel } from '@electron/enums'
 import { sleep, uuid } from '@electron/utils'
-import { spawn } from 'child_process'
-import { app, ipcMain } from 'electron'
+import { ipcMain } from 'electron'
 import ffmpegPath from 'ffmpeg-static'
 import got from 'got'
+import { spawn } from 'node:child_process'
 import { createWriteStream, existsSync, mkdirSync, promises } from 'node:fs'
 import path from 'node:path'
 import { pipeline as streamPipeline } from 'node:stream/promises'
 import userAgents from 'user-agents'
 
+// @ts-ignore
+
 export async function registerDownloadHandler() {
   ipcMain.handle(HandleChannel.DownloadBV, async (_event, params: VideoDownloadParams) => {
     // 视频文件保存的根目录
-    const dataRootPath = app.getPath(FILE_ROOT_PATH_NAME)
+    const dataRootPath = globalStore.get(STORAGE_ROOT_PATH_KEY)
     const folderPath = path.resolve(dataRootPath, params.ownerId, params.bvid)
     const outputFileName = [params.bvid, params.page, params.quality].join('_')
 
@@ -63,7 +65,7 @@ export async function registerDownloadHandler() {
 
 async function downloadFile(url = '', filePath = '') {
   const ua = new userAgents({ deviceCategory: 'desktop' })
-  const SESSDATA = globalStore.get(SESSION_KEY)
+  const SESSDATA = globalStore.get(STORAGE_SESSION_KEY)
 
   await streamPipeline(
     got
@@ -88,14 +90,16 @@ async function mergeVideo(videoPath: string, audioPath: string, outputPath: stri
   const args = ['-i', videoPath, '-i', audioPath, '-c:v', 'copy', '-c:a', 'copy', '-f', 'mp4', outputPath]
 
   return new Promise<void>((resolve, reject) => {
+    console.log('mergeVideo 开始合并', ffmpegPath)
+
     if (!ffmpegPath) {
       return reject('没有找到ffmpeg')
     }
 
-    const ffmpegProcess = spawn(ffmpegPath, args)
+    const ffmpegProcess = spawn(ffmpegPath?.replace('app.asar', 'app.asar.unpacked'), args)
 
     ffmpegProcess.on('error', (err) => {
-      console.log(err)
+      console.log('合成失败', err)
       reject(err)
     })
 

@@ -2,7 +2,7 @@
 // 解决请求跨域问题
 
 import { globalStore } from '@electron/common/global-store'
-import { REFERER, SESSION_KEY } from '@electron/const'
+import { REFERER, STORAGE_SESSION_KEY } from '@electron/const'
 import { HandleChannel } from '@electron/enums'
 import axios, { type AxiosRequestConfig } from 'axios'
 import { ipcMain } from 'electron'
@@ -21,7 +21,7 @@ export async function registerFetchHandler() {
   ipcMain.handle(HandleChannel.Fetch, async (_event, config: AxiosRequestConfig) => {
     const { headers, ...rest } = config
     const ua = new userAgents({ deviceCategory: 'desktop' })
-    const SESSDATA = globalStore.get(SESSION_KEY)
+    const SESSDATA = globalStore.get(STORAGE_SESSION_KEY)
 
     const mergedConfig = {
       ...rest,

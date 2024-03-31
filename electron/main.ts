@@ -1,6 +1,8 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'node:path'
+import { registerDownloadHandler } from './handler/download'
 import { registerFetchHandler } from './handler/fetch'
+import { registerSelectDirHandler } from './handler/select-dir'
 import { regsterStoreHandler } from './handler/store'
 
 // The built directory structure
@@ -64,4 +66,6 @@ app.whenReady().then(() => {
   // 注册事件句柄
   regsterStoreHandler()
   registerFetchHandler()
+  registerSelectDirHandler()
+  registerDownloadHandler()
 })
