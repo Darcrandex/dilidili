@@ -61,6 +61,10 @@ export async function registerDownloadHandler() {
 
     return outputPath
   })
+
+  ipcMain.handle('go', async (_event, params: any) => {
+    await mergeVideo(params.videoTemp, params.audioTemp, params.outputPath)
+  })
 }
 
 async function downloadFile(url = '', filePath = '') {

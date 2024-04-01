@@ -15,6 +15,8 @@ export default function Home() {
             <NavLink to='search'>搜索</NavLink>
             <NavLink to='tasks'>任务</NavLink>
             <NavLink to='files'>文件</NavLink>
+
+            <NavLink to='testing'>测试</NavLink>
           </nav>
         </header>
 

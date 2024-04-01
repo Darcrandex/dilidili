@@ -8,6 +8,8 @@ import Search from '@src/pages/Search'
 import Settings from '@src/pages/Settings'
 import Tasks from '@src/pages/Tasks'
 
+import Testing from '@src/pages/Testing'
+
 export const routes: RouteObject[] = [
   {
     path: '/',
@@ -24,6 +26,8 @@ export const routes: RouteObject[] = [
           { path: 'search', element: <Search /> },
           { path: 'tasks', element: <Tasks /> },
           { path: 'files', element: <Files /> },
+
+          { path: 'testing', element: <Testing /> },
         ],
       },
 
