@@ -13,9 +13,11 @@
   "dependencies": {
     "electron-updater": "^6.1.8",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "ffmpeg-static": "^5.2.0"
+    "ffmpeg-static": "^5.2.0",
+    "fluent-ffmpeg": "^2.1.2"
   },
   "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.24",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
     "@typescript-eslint/eslint-plugin": "^7.5.0",

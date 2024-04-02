@@ -1,9 +1,8 @@
 import { BrowserWindow, app, ipcMain, shell } from 'electron'
-import ffmpegPath from 'ffmpeg-static'
-import { spawn } from 'node:child_process'
 import { release } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { handleMergeVideo } from './merge-video'
 import { update } from './update'
 
 globalThis.__filename = fileURLToPath(import.meta.url)
@@ -86,14 +85,7 @@ async function createWindow() {
   update(win)
 
   ipcMain.handle('get-ffmpeg-path', async () => {
-    // '/Users/daisilin/Downloads/4974304/BV1bj421X7oQ/BV1bj421X7oQ_1_16-video_xddyon7q.m4s',
-    // '/Users/daisilin/Downloads/4974304/BV1bj421X7oQ/BV1bj421X7oQ_1_16-audio_xddyon7q.m4s',
-    // '/Users/daisilin/Downloads/4974304/BV1bj421X7oQ/BV1bj421X7oQ_1_16.mp4'
-    const msg = await mergeVideo(
-      '/Users/daisilin/Downloads/4974304/BV1bj421X7oQ/BV1bj421X7oQ_1_16-video_xddyon7q.m4s',
-      '/Users/daisilin/Downloads/4974304/BV1bj421X7oQ/BV1bj421X7oQ_1_16-audio_xddyon7q.m4s',
-      '/Users/daisilin/Downloads/4974304/BV1bj421X7oQ/BV1bj421X7oQ_1_16.mp4',
-    )
+    const msg = handleMergeVideo()
     return msg
   })
 }
@@ -138,56 +130,3 @@ ipcMain.handle('open-win', (_, arg) => {
     childWindow.loadFile(indexHtml, { hash: arg })
   }
 })
-
-async function mergeVideo(videoPath: string, audioPath: string, outputPath: string) {
-  const args = ['-version']
-  // const args = [
-  //   "-i",
-  //   videoPath,
-  //   "-i",
-  //   audioPath,
-  //   "-c:v",
-  //   "copy",
-  //   "-c:a",
-  //   "copy",
-  //   "-f",
-  //   "mp4",
-  //   outputPath,
-  // ];
-
-  return new Promise<any>((resolve, reject) => {
-    console.log('mergeVideo 开始合并', ffmpegPath)
-
-    if (!ffmpegPath) {
-      return reject('没有找到ffmpeg')
-    }
-
-    const ffmpegProcess = spawn(ffmpegPath, args)
-
-    ffmpegProcess.on('error', (err) => {
-      console.log('合成失败', err)
-      reject(err)
-    })
-
-    ffmpegProcess.on('close', () => {
-      console.log('合并成功 退出 ffmpeg 进程')
-    })
-
-    ffmpegProcess.stdout.on('data', (data) => {
-      console.log(`stdout: ${data}`, typeof data)
-
-      // 创建一个 TextDecoder
-      const decoder = new TextDecoder('utf-8')
-
-      // 将 Uint8Array 转换为文本
-      const text = decoder.decode(data)
-
-      resolve(text)
-    })
-
-    ffmpegProcess.stderr.on('data', (data) => {
-      console.error(`stderr: ${data}`)
-      reject(data)
-    })
-  })
-}
