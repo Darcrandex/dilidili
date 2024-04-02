@@ -33,3 +33,27 @@ jobs:
           name: release_on_${{ matrix. os }}
           path: release/
           retention-days: 5
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release/* # 上传的文件所在的路径
+          token: ${{ secrets.GH_TOKEN }}
+          tag_name: ${{ github.ref }} # 使用 github 上下文中的 ref 字段作为 tag 名称
+          release_name: Release ${{ github.ref }} # 使用 github 上下文中的 ref 字段作为发布名称
+          body: |
+            Description of the release
+
+      - name: Get Release ID
+        id: get_release_id
+        run: echo ::set-output name=release_id::${{ steps.create_release.outputs.id }}
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release_id.outputs.release_id }}
+          asset_path: release.zip
