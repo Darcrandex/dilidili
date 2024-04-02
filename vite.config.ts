@@ -7,6 +7,8 @@ import pkg from './package.json'
 
 export default defineConfig(({ command }) => {
   rmSync('dist-electron', { recursive: true, force: true })
+  rmSync('dist', { recursive: true, force: true })
+  rmSync('release', { recursive: true, force: true })
 
   return {
     resolve: {
