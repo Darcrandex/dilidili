@@ -14,7 +14,7 @@ import { sleep, uuid } from '../utils/common'
 export function registerDownloadBVHandler() {
   ipcMain.handle(EChannel.DownloadBV, async (_event, params: MainProcess.DownloadBVParams) => {
     // 存放视频的根目录
-    const rootDir = globalStore.get(EStorage.RootDir)
+    const rootDir = globalStore.get(EStorage.RootDir) as string
     // BV视频文件夹
     const folderDir = path.resolve(rootDir, params.ownerId, params.bvid)
     // 视频文件
@@ -42,11 +42,12 @@ export function registerDownloadBVHandler() {
       await mixing(videoTemp, audioTemp, outputPath)
     } catch (error) {
       console.error(error)
+      throw error
+    } finally {
+      // 删除临时文件
+      await promises.unlink(videoTemp)
+      await promises.unlink(audioTemp)
     }
-
-    // 删除临时文件
-    await promises.unlink(videoTemp)
-    await promises.unlink(audioTemp)
   })
 }
 

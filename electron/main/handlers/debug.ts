@@ -12,6 +12,7 @@ export function registerDebugHandler() {
 
 function debugFfmpeg() {
   return new Promise<string>((resolve) => {
+    // 打包之后，ffmpeg 的路径永远都是错误的
     if (ffmpegPath) {
       const command = FfmpegCommand()
       command.setFfmpegPath(ffmpegPath)
@@ -22,8 +23,6 @@ function debugFfmpeg() {
           resolve(Object.keys(encoders).join('\n'))
         }
       })
-
-      resolve(ffmpegPath)
     } else {
       resolve('未找到 ffmpeg')
     }
