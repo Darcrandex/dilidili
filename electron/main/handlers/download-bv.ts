@@ -76,8 +76,10 @@ async function mixing(videoPath = '', audioPath = '', outputPath = '') {
       return reject('ffmpeg api 不可用')
     }
 
+    const binaryPath = ffmpegPath.replace('app.asar', 'app.asar.unpacked')
+
     FfmpegCommand()
-      .setFfmpegPath(ffmpegPath)
+      .setFfmpegPath(binaryPath)
       .input(videoPath)
       .input(audioPath)
       .outputOptions(['-c:v copy', '-c:a copy'])

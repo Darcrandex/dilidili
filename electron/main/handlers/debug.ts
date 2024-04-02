@@ -1,26 +1,35 @@
 import { EChannel } from '@electron/enums'
-import { ipcMain } from 'electron'
+import { app, ipcMain } from 'electron'
 import ffmpegPath from 'ffmpeg-static'
 import FfmpegCommand from 'fluent-ffmpeg'
+import path from 'node:path'
 
 export function registerDebugHandler() {
   ipcMain.handle(EChannel.Debug, async () => {
+    // app 执行文件所在的目录
+    // 其实就是 Resources
+    const appRootDir = path.dirname(app.getAppPath())
     const ffmpeg = await debugFfmpeg()
-    return { ffmpeg }
+    return { appRootDir, ffmpeg }
   })
 }
 
 function debugFfmpeg() {
   return new Promise<string>((resolve) => {
-    // 打包之后，ffmpeg 的路径永远都是错误的
     if (ffmpegPath) {
+      // 打包之后路径需要调整
+      // 打包时，ffmpeg 下载的是当前打包的机器对应的二进制文件
+      // 不是 app 目标平台对应的二进制文件
+      // 所有路径修改正确，但文件是错误的
+      const binaryPath = ffmpegPath.replace('app.asar', 'app.asar.unpacked')
+
       const command = FfmpegCommand()
-      command.setFfmpegPath(ffmpegPath)
+      command.setFfmpegPath(binaryPath)
       command.getAvailableEncoders((err, encoders) => {
-        if (err) {
-          resolve('ffmpeg api 不可用')
+        if (err || !encoders) {
+          resolve(`ffmpeg 路径：${binaryPath} 匹配错误`)
         } else {
-          resolve(Object.keys(encoders).join('\n'))
+          resolve(binaryPath)
         }
       })
     } else {

@@ -8,6 +8,7 @@
     output: 'release/${version}',
   },
   files: ['dist-electron', 'dist'],
+
   mac: {
     artifactName: '${productName}_${version}.${ext}',
     target: ['dmg', 'zip'],
