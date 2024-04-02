@@ -27,11 +27,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Remove old artifact if exists
-        run: |
-          if ( -f "release_on_${{ matrix.os }}.zip" ); then
-            rm "release_on_${{ matrix.os }}.zip"
-          fi
+      - name: Remove old artifact
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: release_on_${{ matrix.os }}.zip
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
