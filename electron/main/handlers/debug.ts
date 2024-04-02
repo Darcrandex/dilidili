@@ -1,10 +1,10 @@
+import { EChannel } from '@electron/enums'
 import { ipcMain } from 'electron'
 import ffmpegPath from 'ffmpeg-static'
 import FfmpegCommand from 'fluent-ffmpeg'
-import { Channel } from '../enums/channel'
 
 export function registerDebugHandler() {
-  ipcMain.handle(Channel.Debug, async () => {
+  ipcMain.handle(EChannel.Debug, async () => {
     const ffmpeg = await debugFfmpeg()
     return { ffmpeg }
   })

@@ -5,7 +5,9 @@ import { defineConfig } from 'vite'
 import electron from 'vite-plugin-electron/simple'
 import pkg from './package.json'
 
-export default defineConfig(({ command }) => {
+export default defineConfig(({ command, mode }) => {
+  console.log('vite', { command, mode })
+
   rmSync('dist-electron', { recursive: true, force: true })
   rmSync('dist', { recursive: true, force: true })
   rmSync('release', { recursive: true, force: true })

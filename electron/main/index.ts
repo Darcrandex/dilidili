@@ -3,7 +3,10 @@ import { release } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { registerDebugHandler } from './handlers/debug'
+import { registerDownloadBVHandler } from './handlers/download-bv'
 import { registerFetchHandler } from './handlers/fetch'
+import { registerSelectDirHandler } from './handlers/select-dir'
+import { registerStorageHandler } from './handlers/storage'
 import { update } from './update'
 
 globalThis.__filename = fileURLToPath(import.meta.url)
@@ -87,6 +90,9 @@ async function createWindow() {
 
   registerDebugHandler()
   registerFetchHandler()
+  registerSelectDirHandler()
+  registerStorageHandler()
+  registerDownloadBVHandler()
 }
 
 app.whenReady().then(createWindow)
