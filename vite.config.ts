@@ -26,6 +26,11 @@ export default defineConfig(({ command, mode }) => {
           entry: 'electron/main/index.ts',
 
           vite: {
+            resolve: {
+              alias: {
+                '@electron': path.join(__dirname, 'electron'),
+              },
+            },
             build: {
               outDir: 'dist-electron/main',
               rollupOptions: {

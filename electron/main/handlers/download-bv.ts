@@ -21,7 +21,7 @@ export function registerDownloadBVHandler() {
     const outputFileName = [params.bvid, params.page, params.quality].join('_')
 
     // 创建文件夹
-    mkdirSync(folderDir)
+    mkdirSync(folderDir, { recursive: true })
 
     // 下载的临时文件
     const id = uuid()
@@ -38,11 +38,15 @@ export function registerDownloadBVHandler() {
     await downloadFile(params.coverImageUrl, coverImagePath)
 
     // 音视频混流
-    await mixing(videoTemp, audioTemp, outputPath)
+    try {
+      await mixing(videoTemp, audioTemp, outputPath)
+    } catch (error) {
+      console.error(error)
+    }
 
     // 删除临时文件
-    await promises.rm(videoTemp)
-    await promises.rm(audioTemp)
+    await promises.unlink(videoTemp)
+    await promises.unlink(audioTemp)
   })
 }
 
@@ -75,10 +79,9 @@ async function mixing(videoPath = '', audioPath = '', outputPath = '') {
       .setFfmpegPath(ffmpegPath)
       .input(videoPath)
       .input(audioPath)
-      .outputOptions('-c:v copy -c:a copy')
-      .output(outputPath)
+      .outputOptions(['-c:v copy', '-c:a copy'])
       .on('error', reject)
       .on('end', () => resolve())
-      .run()
+      .save(outputPath)
   })
 }

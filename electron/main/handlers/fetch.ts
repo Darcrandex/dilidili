@@ -5,7 +5,6 @@ import UserAgents from 'user-agents'
 import { globalStore } from '../global-store'
 
 const axiosInstance = axios.create({
-  baseURL: '',
   timeout: 1000,
 })
 
