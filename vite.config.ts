@@ -14,6 +14,7 @@ export default defineConfig(({ command }) => {
     resolve: {
       alias: {
         '@': path.join(__dirname, 'src'),
+        '@electron': path.join(__dirname, 'electron'),
       },
     },
     plugins: [

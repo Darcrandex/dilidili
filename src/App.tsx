@@ -4,13 +4,14 @@
  * @author darcrand
  */
 
+import { Channel } from '@electron/main/enums/channel'
 import { useEffect } from 'react'
 
 export default function App() {
   useEffect(() => {
     console.log('App')
-    window.ipcRenderer.invoke('get-ffmpeg-path').then((res) => {
-      console.log('get-ffmpeg-path', res)
+    window.ipcRenderer.invoke(Channel.Debug).then((res: any) => {
+      console.table(res)
     })
   }, [])
 

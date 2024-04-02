@@ -1,4 +1,4 @@
-import { ipcRenderer, contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
@@ -57,7 +57,7 @@ const safeDOM = {
  * https://projects.lukehaas.me/css-loaders
  * https://matejkustec.github.io/SpinThatShit
  */
-function useLoading() {
+function loadingManager() {
   const className = `loaders-css__square-spin`
   const styleContent = `
 @keyframes square-spin {
@@ -108,7 +108,7 @@ function useLoading() {
 
 // ----------------------------------------------------------------------
 
-const { appendLoading, removeLoading } = useLoading()
+const { appendLoading, removeLoading } = loadingManager()
 domReady().then(appendLoading)
 
 window.onmessage = (ev) => {

@@ -9,5 +9,7 @@ export function handleMergeVideo() {
   const command = FfmpegCommand()
   command.setFfmpegPath(ffmpegPath)
 
+  command.getAvailableEncoders((err, encoders) => {})
+
   return ffmpegPath
 }

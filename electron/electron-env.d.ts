@@ -9,3 +9,5 @@ declare namespace NodeJS {
     VITE_PUBLIC: string
   }
 }
+
+// 主进程和渲染进程均可访问的全局类型

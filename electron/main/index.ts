@@ -2,7 +2,8 @@ import { BrowserWindow, app, ipcMain, shell } from 'electron'
 import { release } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { handleMergeVideo } from './merge-video'
+import { registerDebugHandler } from './handlers/debug'
+import { registerFetchHandler } from './handlers/fetch'
 import { update } from './update'
 
 globalThis.__filename = fileURLToPath(import.meta.url)
@@ -84,10 +85,8 @@ async function createWindow() {
   // Apply electron-updater
   update(win)
 
-  ipcMain.handle('get-ffmpeg-path', async () => {
-    const msg = handleMergeVideo()
-    return msg
-  })
+  registerDebugHandler()
+  registerFetchHandler()
 }
 
 app.whenReady().then(createWindow)
