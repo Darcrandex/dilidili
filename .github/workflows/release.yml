@@ -29,7 +29,7 @@ jobs:
 
       - name: Remove old artifact if exists
         run: |
-          if [ -f "release_on_${{ matrix.os }}.zip" ]; then
+          if ( -f "release_on_${{ matrix.os }}.zip" ); then
             rm "release_on_${{ matrix.os }}.zip"
           fi
 
