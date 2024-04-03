@@ -13,8 +13,9 @@ declare namespace MainProcess {
   // 视频基本信息
 
   interface VideoInfoSchema {
+    aid: number
     bvid: string
-    cid?: number
+    cid: number
     title: string
     pic: string
     duration: number

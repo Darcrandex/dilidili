@@ -1,9 +1,20 @@
+import { StyleProvider } from '@ant-design/cssinjs'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ConfigProvider } from 'antd'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
 
+const queryClient = new QueryClient()
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <ConfigProvider theme={{ token: { colorPrimary: '#fb7299' } }}>
+        <StyleProvider hashPriority='high'>
+          <App />
+        </StyleProvider>
+      </ConfigProvider>
+    </QueryClientProvider>
   </>,
 )
