@@ -19,3 +19,6 @@ export default function App() {
     </>
   )
 }
+
+// 通知 preload 进程移除 loading
+postMessage({ payload: 'removeLoading' }, '*')
