@@ -26,7 +26,6 @@ export default function DownloadModal(props: DownloadModalProps) {
     queryKey: ['video', 'playurl', props.videoInfo.bvid, props.videoInfo.cid],
     enabled: !!props.videoInfo.bvid,
     queryFn: () => mediaService.playurl(props.videoInfo.bvid, props.videoInfo.cid),
-    select: (res) => res.data,
   })
 
   // 所有视频分p的数据

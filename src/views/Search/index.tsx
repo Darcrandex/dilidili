@@ -32,7 +32,6 @@ export default function Search() {
     queryKey: ['video', text],
     enabled: !!bvid,
     queryFn: () => mediaService.info(bvid),
-    select: (res) => res.data,
   })
 
   return (

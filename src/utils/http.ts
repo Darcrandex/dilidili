@@ -13,5 +13,5 @@ export async function http<Data = any>(config: AxiosRequestConfig<Data>) {
     throw new Error(res.message)
   }
 
-  return res
+  return res.data
 }
