@@ -1,5 +1,5 @@
 import { EChannel, ECommon, EStorage } from '@electron/enums'
-import { ipcMain } from 'electron'
+import { BrowserWindow, ipcMain } from 'electron'
 import ffmpegPath from 'ffmpeg-static'
 import FfmpegCommand from 'fluent-ffmpeg'
 import got from 'got'
@@ -23,28 +23,40 @@ export function registerDownloadBVHandler() {
     // 创建文件夹
     mkdirSync(folderDir, { recursive: true })
 
-    // 下载的临时文件
     const id = uuid()
+    // 下载的临时文件
     const videoTemp = path.resolve(folderDir, `${id}_video.m4s`)
     const audioTemp = path.resolve(folderDir, `${id}_audio.m4s`)
+
     const coverImagePath = path.resolve(folderDir, `${params.bvid}-cover.jpg`)
     const videoInfoPath = path.resolve(folderDir, `${params.bvid}-info.json`)
     const outputPath = path.resolve(folderDir, `${outputFileName}.mp4`)
 
-    // 服务端有请求频次限制
-    await downloadFile(params.videoDownloadUrl, videoTemp)
-    await sleep(200 + Math.random() * 1000)
-    await downloadFile(params.audioDownloadUrl, audioTemp)
-    await sleep(200 + Math.random() * 1000)
-    await downloadFile(params.coverImageUrl, coverImagePath)
-    await saveToJSONFile(videoInfoPath, params.videoInfo)
+    // 任务开始
+    const newTask: MainProcess.DownloadTask = { id, status: 1, params }
+    taskModel.create(newTask)
 
-    // 音视频混流
     try {
+      // 服务端有请求频次限制
+      await sleep(200 + Math.random() * 1000)
+      await downloadFile(params.videoDownloadUrl, videoTemp)
+      await sleep(200 + Math.random() * 1000)
+      await downloadFile(params.audioDownloadUrl, audioTemp)
+      await sleep(200 + Math.random() * 1000)
+      await downloadFile(params.coverImageUrl, coverImagePath)
+      await saveToJSONFile(videoInfoPath, params.videoInfo)
+      taskModel.update(newTask.id, { status: 2 })
+
+      // 音视频混流
       await mixing(videoTemp, audioTemp, outputPath)
+
+      // 任务完成
+      taskModel.update(newTask.id, { status: 3 })
     } catch (error) {
-      console.error(error)
-      throw error
+      console.error('混流失败\n', { videoTemp, audioTemp, outputPath }, error)
+
+      // 任务失败
+      taskModel.update(newTask.id, { status: 0 })
     } finally {
       // 删除临时文件
       await promises.unlink(videoTemp)
@@ -105,4 +117,45 @@ function saveToJSONFile(filePath: string, data: any): Promise<void> {
       resolve()
     })
   })
+}
+
+// 临时方案
+// 任务管理模块
+const taskModel = {
+  create: async (data: MainProcess.DownloadTask) => {
+    const prevTasks = globalStore.get(EStorage.DownloadTasks)
+    globalStore.set(EStorage.DownloadTasks, [...prevTasks, data])
+    BrowserWindow.getAllWindows().forEach((win) => {
+      win.webContents.send(EChannel.StoreUpdated, EStorage.DownloadTasks)
+    })
+  },
+
+  update: async (id: string, data: Partial<MainProcess.DownloadTask>) => {
+    const prevTasks = globalStore.get(EStorage.DownloadTasks)
+    globalStore.set(
+      EStorage.DownloadTasks,
+      prevTasks.map((task) => (task.id === id ? { ...task, ...data } : task)),
+    )
+    BrowserWindow.getAllWindows().forEach((win) => {
+      win.webContents.send(EChannel.StoreUpdated, EStorage.DownloadTasks)
+    })
+  },
+
+  remove: async (taskId: string) => {
+    const prevTasks = globalStore.get(EStorage.DownloadTasks)
+    globalStore.set(
+      EStorage.DownloadTasks,
+      prevTasks.filter((task) => task.id !== taskId),
+    )
+    BrowserWindow.getAllWindows().forEach((win) => {
+      win.webContents.send(EChannel.StoreUpdated, EStorage.DownloadTasks)
+    })
+  },
+
+  removeAll: async () => {
+    globalStore.set(EStorage.DownloadTasks, [])
+    BrowserWindow.getAllWindows().forEach((win) => {
+      win.webContents.send(EChannel.StoreUpdated, EStorage.DownloadTasks)
+    })
+  },
 }

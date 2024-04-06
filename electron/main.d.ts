@@ -25,6 +25,9 @@ declare namespace MainProcess {
     duration: number
     owner: Owner
     pages: Page[]
+
+    // 视频上传时间
+    pubdate: number
   }
 
   interface Owner {
@@ -177,10 +180,24 @@ declare namespace MainProcess {
   // 通过读取文件系统获取的视频目录信息
   interface BVTreeWithInfo {
     mid: string
+    dir: string
     bvs: {
       bvid: string
       dir: string // 视频所在的本地目录
       info: VideoInfoSchema | null // 缓存在 json 文件的视频信息
+
+      // 本地文件信息
+      localInfo: {
+        coverPath: string // 封面
+        videoPaths: string[] // 分P视频（不同清晰度）
+      }
     }[]
+  }
+
+  // 下载任务
+  interface DownloadTask {
+    id: string
+    status: number
+    params: DownloadBVParams
   }
 }

@@ -12,7 +12,7 @@ class ElectronStorage<T> implements AsyncStorage<T> {
   }
 
   async setItem(key: string, newValue: T): Promise<void> {
-    return window.ipcRenderer.invoke(EChannel.SetStore, key, newValue)
+    return window.ipcRenderer.invoke(EChannel.SetStore, { [key]: newValue })
   }
 
   async removeItem(key: string): Promise<void> {

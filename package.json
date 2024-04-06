@@ -17,6 +17,7 @@
     "ahooks": "^3.7.11",
     "antd": "^5.16.0",
     "axios": "^1.6.8",
+    "dayjs": "^1.11.10",
     "electron-store": "^8.2.0",
     "electron-updater": "^6.1.8",
     "eslint-plugin-react-hooks": "^4.6.0",

@@ -13,6 +13,7 @@ export enum EChannel {
   GetStore = 'get-store',
   RemoveStore = 'remove-store',
   ClearStore = 'clear-store',
+  StoreUpdated = 'store-updated',
 
   ReadDir = 'read-dir',
   ReadFile = 'read-file',
@@ -28,4 +29,6 @@ export enum EStorage {
   Session = 'SESSDATA',
 
   RootDir = 'rootDir',
+
+  DownloadTasks = 'downloadTasks',
 }

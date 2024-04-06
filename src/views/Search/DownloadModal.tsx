@@ -7,12 +7,12 @@
 import { mediaService } from '@/services/media'
 import { cls } from '@/utils/cls'
 import { EChannel } from '@electron/enums'
-import { sleep } from '@electron/main/utils/common'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useSelections } from 'ahooks'
 import { Button, Checkbox, Col, Modal, Row, Select } from 'antd'
 import * as R from 'ramda'
 import { ReactNode, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export type DownloadModalProps = {
   videoInfo: MainProcess.VideoInfoSchema
@@ -21,6 +21,8 @@ export type DownloadModalProps = {
 }
 
 export default function DownloadModal(props: DownloadModalProps) {
+  const navigate = useNavigate()
+
   // 视频第一个分p
   const { data: playurlData } = useQuery({
     queryKey: ['video', 'playurl', props.videoInfo.bvid, props.videoInfo.cid],
@@ -114,18 +116,11 @@ export default function DownloadModal(props: DownloadModalProps) {
       })
       .filter((v) => Boolean(v.videoDownloadUrl && v.audioDownloadUrl))
 
-    console.log('tasks', taskParamsArr)
-
-    // 切记
-    // bilibili api 有请求频次限制
-    const tasks = taskParamsArr.map(async (v) => {
-      await sleep(Math.random() * 500)
-      return await window.ipcRenderer.invoke(EChannel.DownloadBV, v)
-    })
-
+    const tasks = taskParamsArr.map((v) => window.ipcRenderer.invoke(EChannel.DownloadBV, v))
     Promise.all(tasks)
 
     onCancel()
+    navigate('/home/tasks', { replace: true })
   }
 
   return (

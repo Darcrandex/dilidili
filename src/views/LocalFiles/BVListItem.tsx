@@ -6,10 +6,12 @@
 
 import { EChannel } from '@electron/enums'
 import { Button } from 'antd'
+import dayjs from 'dayjs'
 
 export type BVListItemProps = {
   localFolderDir: string
   videoInfo: MainProcess.VideoInfoSchema
+  localInfo: MainProcess.BVTreeWithInfo['bvs'][number]['localInfo']
 }
 
 export default function BVListItem(props: BVListItemProps) {
@@ -29,7 +31,11 @@ export default function BVListItem(props: BVListItemProps) {
           className='block w-full h-36 rounded-md object-cover'
         />
         <p className='truncate'>{props.videoInfo.title}</p>
-        <p>up: {props.videoInfo.owner.name}</p>
+
+        <p className='flex items-center justify-between'>
+          <span>up: {props.videoInfo.owner.name}</span>
+          <span>{dayjs(props.videoInfo.pubdate * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>
+        </p>
 
         <Button onClick={onOpenDir}>打开本地文件夹</Button>
       </article>

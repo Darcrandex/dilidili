@@ -39,7 +39,7 @@ export default function LocalFiles() {
       <ul className='flex flex-wrap p-4'>
         {flattenVideoInfos?.map((v) => (
           <li key={v.bvid} className='sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4'>
-            <BVListItem videoInfo={v.info!} localFolderDir={v.dir} />
+            <BVListItem videoInfo={v.info!} localFolderDir={v.dir} localInfo={v.localInfo} />
           </li>
         ))}
       </ul>
