@@ -29,7 +29,7 @@ export default function Home() {
           </nav>
         </header>
 
-        <main className='flex-1'>
+        <main className='flex-1 overflow-auto'>
           <Suspense fallback='loading...'>
             <Outlet />
           </Suspense>

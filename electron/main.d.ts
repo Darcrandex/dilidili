@@ -8,6 +8,10 @@ declare namespace MainProcess {
     bvid: string // 视频id
     page: number // 分P序号
     quality: number // 质量编号
+
+    // 当前 BV 的视频信息
+    // 为了在数据回填时减少请求
+    videoInfo: VideoInfoSchema
   }
 
   // 视频基本信息
@@ -163,5 +167,20 @@ declare namespace MainProcess {
       sub_url: string
     }
     is_jury: boolean
+  }
+
+  interface FileNode {
+    name: string
+    children: FileNode[]
+  }
+
+  // 通过读取文件系统获取的视频目录信息
+  interface BVTreeWithInfo {
+    mid: string
+    bvs: {
+      bvid: string
+      dir: string // 视频所在的本地目录
+      info: VideoInfoSchema | null // 缓存在 json 文件的视频信息
+    }[]
   }
 }

@@ -9,6 +9,8 @@ export async function http<Data = any>(config: AxiosRequestConfig<Data>) {
     ttl: number
   } = await window.ipcRenderer.invoke(EChannel.Fetch, config)
 
+  console.log('electron-fetch res:', { config, res })
+
   if (res.code !== 0) {
     throw new Error(res.message)
   }

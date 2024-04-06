@@ -10,7 +10,7 @@ import { EChannel } from '@electron/enums'
 import { sleep } from '@electron/main/utils/common'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useSelections } from 'ahooks'
-import { Button, Checkbox, Modal, Select, Space } from 'antd'
+import { Button, Checkbox, Col, Modal, Row, Select } from 'antd'
 import * as R from 'ramda'
 import { ReactNode, useMemo, useState } from 'react'
 
@@ -34,9 +34,7 @@ export default function DownloadModal(props: DownloadModalProps) {
       queryKey: ['video', 'playurl', props.videoInfo.bvid, v.cid],
       enabled: !!props.videoInfo.bvid && !!v.cid,
       queryFn: () => mediaService.playurl(props.videoInfo.bvid, v.cid),
-      select: (res: any) => {
-        // 获取到视频分p数据后，还需要绑定 page 序号，用于后面匹配
-        const info = res.data as MainProcess.PageInfoSchema
+      select: (info: MainProcess.PageInfoSchema) => {
         return { page: v.page, info }
       },
     })),
@@ -109,6 +107,7 @@ export default function DownloadModal(props: DownloadModalProps) {
           videoDownloadUrl,
           audioDownloadUrl,
           coverImageUrl: props.videoInfo.pic,
+          videoInfo: props.videoInfo,
         }
 
         return params
@@ -116,12 +115,15 @@ export default function DownloadModal(props: DownloadModalProps) {
       .filter((v) => Boolean(v.videoDownloadUrl && v.audioDownloadUrl))
 
     console.log('tasks', taskParamsArr)
+
+    // 切记
+    // bilibili api 有请求频次限制
     const tasks = taskParamsArr.map(async (v) => {
       await sleep(Math.random() * 500)
-      return window.ipcRenderer.invoke(EChannel.DownloadBV, v)
+      return await window.ipcRenderer.invoke(EChannel.DownloadBV, v)
     })
 
-    await Promise.all(tasks)
+    Promise.all(tasks)
 
     onCancel()
   }
@@ -167,11 +169,18 @@ export default function DownloadModal(props: DownloadModalProps) {
             </ul>
           </div>
 
-          <Space>
-            <Button type='primary' disabled={!quality || !selectedPages.length} onClick={onOk}>
-              下载({selectedPages.length})
-            </Button>
-          </Space>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Button block onClick={onCancel}>
+                取消
+              </Button>
+            </Col>
+            <Col span={12}>
+              <Button block type='primary' disabled={!quality || !selectedPages.length} onClick={onOk}>
+                开始下载({selectedPages.length})
+              </Button>
+            </Col>
+          </Row>
         </section>
       </Modal>
     </>

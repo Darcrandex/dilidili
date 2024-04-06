@@ -3,7 +3,7 @@ import { ipcMain } from 'electron'
 import ffmpegPath from 'ffmpeg-static'
 import FfmpegCommand from 'fluent-ffmpeg'
 import got from 'got'
-import { createWriteStream, mkdirSync, promises } from 'node:fs'
+import { createWriteStream, mkdirSync, promises, writeFile } from 'node:fs'
 import path from 'node:path'
 import { pipeline as streamPipeline } from 'node:stream/promises'
 import userAgents from 'user-agents'
@@ -28,6 +28,7 @@ export function registerDownloadBVHandler() {
     const videoTemp = path.resolve(folderDir, `${id}_video.m4s`)
     const audioTemp = path.resolve(folderDir, `${id}_audio.m4s`)
     const coverImagePath = path.resolve(folderDir, `${params.bvid}-cover.jpg`)
+    const videoInfoPath = path.resolve(folderDir, `${params.bvid}-info.json`)
     const outputPath = path.resolve(folderDir, `${outputFileName}.mp4`)
 
     // 服务端有请求频次限制
@@ -36,6 +37,7 @@ export function registerDownloadBVHandler() {
     await downloadFile(params.audioDownloadUrl, audioTemp)
     await sleep(200 + Math.random() * 1000)
     await downloadFile(params.coverImageUrl, coverImagePath)
+    await saveToJSONFile(videoInfoPath, params.videoInfo)
 
     // 音视频混流
     try {
@@ -86,5 +88,21 @@ async function mixing(videoPath = '', audioPath = '', outputPath = '') {
       .on('error', reject)
       .on('end', () => resolve())
       .save(outputPath)
+  })
+}
+
+function saveToJSONFile(filePath: string, data: any): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // 将嵌套对象转换为 JSON 格式的字符串
+    const jsonData = JSON.stringify(data)
+
+    // 将 JSON 字符串写入到文件中
+    writeFile(filePath, jsonData, (err) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      resolve()
+    })
   })
 }

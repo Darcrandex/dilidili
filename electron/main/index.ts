@@ -2,9 +2,12 @@ import { BrowserWindow, app, ipcMain, shell } from 'electron'
 import { release } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { registerBvInfoHandler } from './handlers/bv-info'
 import { registerDebugHandler } from './handlers/debug'
 import { registerDownloadBVHandler } from './handlers/download-bv'
 import { registerFetchHandler } from './handlers/fetch'
+import { registerOpenDirHandler } from './handlers/open-dir'
+import { registerReadDirHandler } from './handlers/read-dir'
 import { registerSelectDirHandler } from './handlers/select-dir'
 import { registerStorageHandler } from './handlers/storage'
 import { update } from './update'
@@ -53,6 +56,9 @@ const indexHtml = join(process.env.DIST, 'index.html')
 async function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
+    minWidth: 800,
+    minHeight: 600,
+
     icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
     webPreferences: {
       preload,
@@ -93,6 +99,9 @@ async function createWindow() {
   registerSelectDirHandler()
   registerStorageHandler()
   registerDownloadBVHandler()
+  registerReadDirHandler()
+  registerBvInfoHandler()
+  registerOpenDirHandler()
 }
 
 app.whenReady().then(createWindow)

@@ -34,14 +34,17 @@ export default function Search() {
     queryFn: () => mediaService.info(bvid),
   })
 
+  const iframeUrl = bvid ? `https://player.bilibili.com/player.html?bvid=${bvid}&page=${p}` : ''
+
   return (
     <>
-      <section className='w-144 max-w-full mx-auto mt-4 space-y-4'>
+      <section className='w-144 max-w-full mx-auto my-4 space-y-4'>
         <Input.Search
           placeholder='输入视频地址以搜索'
           enterButton
           size='large'
           defaultValue={text}
+          allowClear
           onSearch={(v) => setState({ text: v })}
         />
 
@@ -63,7 +66,9 @@ export default function Search() {
 
             <h2>{videoInfo.title}</h2>
 
-            <img src={videoInfo.pic} alt='' referrerPolicy='no-referrer' className='block w-full rounded-lg' />
+            <img src={videoInfo.pic} alt='' referrerPolicy='no-referrer' className='hidden w-full rounded-lg' />
+
+            <iframe src={iframeUrl} className='block w-full h-80 rounded-md overflow-hidden' />
 
             <p className='text-center'>
               <DownloadModal
