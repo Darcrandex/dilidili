@@ -26,6 +26,7 @@ export default function Tasks() {
     },
   })
 
+  // 监听 store 更新
   useEffect(() => {
     const listener = (_event: any, key: string) => {
       if (key === EStorage.DownloadTasks) {
@@ -45,6 +46,10 @@ export default function Tasks() {
     queryClient.invalidateQueries({ queryKey: ['tasks'] })
   }
 
+  const onOpenDir = async (folderDir: string) => {
+    await window.ipcRenderer.invoke(EChannel.OpenDir, folderDir)
+  }
+
   return (
     <>
       <h1>Tasks</h1>
@@ -57,6 +62,10 @@ export default function Tasks() {
             <p>{v.id}</p>
             <p>{taskStatusMap.get(v.status)}</p>
             <p>{v.params.videoInfo.title}</p>
+
+            <Button disabled={v.status !== 3 || !v.folderDir} onClick={() => onOpenDir(v.folderDir)}>
+              打开文件夹
+            </Button>
           </li>
         ))}
       </ol>

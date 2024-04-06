@@ -33,7 +33,7 @@ export function registerDownloadBVHandler() {
     const outputPath = path.resolve(folderDir, `${outputFileName}.mp4`)
 
     // 任务开始
-    const newTask: MainProcess.DownloadTask = { id, status: 1, params }
+    const newTask: MainProcess.DownloadTask = { id, status: 1, params, folderDir }
     taskModel.create(newTask)
 
     try {

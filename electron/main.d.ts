@@ -199,5 +199,6 @@ declare namespace MainProcess {
     id: string
     status: number
     params: DownloadBVParams
+    folderDir: string // bv 视频文件夹
   }
 }
