@@ -4,8 +4,10 @@
  * @author darcrand
  */
 
+import TopHeader from '@/components/TopHeader'
+import UTabs from '@/ui/UTabs'
 import { Suspense } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { Outlet, useMatch, useNavigate } from 'react-router-dom'
 
 const navs = [
   { to: 'search', title: '搜索视频' },
@@ -14,20 +16,24 @@ const navs = [
 ]
 
 export default function Home() {
+  const navigate = useNavigate()
+  const tabKey = useMatch('/home/:tabKey')?.params.tabKey
+
   return (
     <>
       <section className='flex flex-col h-screen'>
-        <header className='flex items-center p-4 border-b'>
-          <h1>dilidili</h1>
-
+        <TopHeader>
           <nav className='flex items-center ml-4 space-x-2'>
-            {navs.map((v) => (
-              <NavLink key={v.to} to={v.to} replace>
-                {v.title}
-              </NavLink>
-            ))}
+            <UTabs
+              items={navs.map((v) => ({
+                key: v.to,
+                title: v.title,
+                onClick: () => navigate(v.to, { replace: true }),
+              }))}
+              activeKey={tabKey}
+            />
           </nav>
-        </header>
+        </TopHeader>
 
         <main className='flex-1 overflow-auto'>
           <Suspense fallback='loading...'>

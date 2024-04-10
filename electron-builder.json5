@@ -2,7 +2,7 @@
  * @see https://www.electron.build/configuration/configuration
  */
 {
-  appId: 'YourAppID',
+  appId: 'just',
   asar: true,
   directories: {
     output: 'release/${version}',
@@ -11,7 +11,7 @@
 
   mac: {
     artifactName: '${productName}_${version}.${ext}',
-    target: ['dmg', 'zip'],
+    target: ['zip'],
   },
   win: {
     target: [

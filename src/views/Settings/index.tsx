@@ -6,7 +6,7 @@
 
 import { useRootPath } from '@/stores/root-path'
 import { EChannel } from '@electron/enums'
-import { Button } from 'antd'
+import { Button, Space } from 'antd'
 
 export default function Settings() {
   const [rootPath, setRootPath] = useRootPath()
@@ -23,7 +23,10 @@ export default function Settings() {
 
       <p>rootPath: {rootPath}</p>
 
-      <Button onClick={() => onSelectRootPath()}>选择文件夹目录</Button>
+      <Space>
+        <Button onClick={() => onSelectRootPath()}>选择文件夹目录</Button>
+        <Button>清空缓存</Button>
+      </Space>
     </>
   )
 }

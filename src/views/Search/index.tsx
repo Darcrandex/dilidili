@@ -5,15 +5,20 @@
  */
 
 import { mediaService } from '@/services/media'
+import { useSession } from '@/stores/session'
 import { useVideoSearch } from '@/stores/video-search'
 import { DownloadOutlined } from '@ant-design/icons'
+import { EChannel } from '@electron/enums'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Input } from 'antd'
 import qs from 'qs'
 import { useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import DownloadModal from './DownloadModal'
 
 export default function Search() {
+  const navigate = useNavigate()
+  const [session] = useSession()
   const [{ text }, setState] = useVideoSearch()
 
   const bvid = useMemo(() => {
@@ -42,7 +47,6 @@ export default function Search() {
         <Input.Search
           placeholder='输入视频地址以搜索'
           enterButton
-          size='large'
           defaultValue={text}
           allowClear
           onSearch={(v) => setState({ text: v })}
@@ -59,7 +63,17 @@ export default function Search() {
               />
 
               <div>
-                <p>{videoInfo.owner.name}</p>
+                <p
+                  onClick={() =>
+                    window.ipcRenderer.invoke(
+                      EChannel.OpenInBrowser,
+                      `https://space.bilibili.com/${videoInfo.owner.mid}`,
+                    )
+                  }
+                  className='truncate text-primary cursor-pointer transition-colors hover:opacity-80'
+                >
+                  {videoInfo.owner.name}
+                </p>
                 <p>MID: {videoInfo.owner.mid}</p>
               </div>
             </article>
@@ -81,6 +95,15 @@ export default function Search() {
                 )}
               />
             </p>
+
+            {!session && (
+              <p className='text-center'>
+                <Button type='link' onClick={() => navigate('/mine', { replace: true })}>
+                  登录
+                </Button>
+                <span>后可以下载 720P 以上的视频哦</span>
+              </p>
+            )}
           </>
         )}
       </section>

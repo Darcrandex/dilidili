@@ -5,6 +5,7 @@
  */
 
 import { mediaService } from '@/services/media'
+import { useSession } from '@/stores/session'
 import { cls } from '@/utils/cls'
 import { EChannel } from '@electron/enums'
 import { useQueries, useQuery } from '@tanstack/react-query'
@@ -21,6 +22,7 @@ export type DownloadModalProps = {
 }
 
 export default function DownloadModal(props: DownloadModalProps) {
+  const [session] = useSession()
   const navigate = useNavigate()
 
   // 视频第一个分p
@@ -48,8 +50,9 @@ export default function DownloadModal(props: DownloadModalProps) {
     return playurlData.support_formats.map((item) => ({
       value: item.quality,
       label: item.new_description,
+      disabled: !session && item.quality > 64,
     }))
-  }, [playurlData])
+  }, [playurlData, session])
 
   // 视频分p
   const pages = useMemo(() => {
@@ -75,7 +78,7 @@ export default function DownloadModal(props: DownloadModalProps) {
   )
 
   const beforeOpen = () => {
-    setQuality(qualityOptions[0]?.value)
+    setQuality(qualityOptions?.find((v) => !v.disabled)?.value)
     setSelected([props.defaultPage].filter(Boolean) as number[])
     setOpen(true)
   }
@@ -117,6 +120,7 @@ export default function DownloadModal(props: DownloadModalProps) {
       .filter((v) => Boolean(v.videoDownloadUrl && v.audioDownloadUrl))
 
     const tasks = taskParamsArr.map((v) => window.ipcRenderer.invoke(EChannel.DownloadBV, v))
+
     Promise.all(tasks)
 
     onCancel()

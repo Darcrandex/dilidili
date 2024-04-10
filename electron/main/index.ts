@@ -7,6 +7,7 @@ import { registerDebugHandler } from './handlers/debug'
 import { registerDownloadBVHandler } from './handlers/download-bv'
 import { registerFetchHandler } from './handlers/fetch'
 import { registerOpenDirHandler } from './handlers/open-dir'
+import { registerOpenInBrowserHandler } from './handlers/open-in-browser'
 import { registerReadDirHandler } from './handlers/read-dir'
 import { registerSelectDirHandler } from './handlers/select-dir'
 import { registerStorageHandler } from './handlers/storage'
@@ -56,6 +57,8 @@ const indexHtml = join(process.env.DIST, 'index.html')
 async function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
+    width: 800,
+    height: 700,
     minWidth: 800,
     minHeight: 600,
 
@@ -102,6 +105,7 @@ async function createWindow() {
   registerReadDirHandler()
   registerBvInfoHandler()
   registerOpenDirHandler()
+  registerOpenInBrowserHandler()
 }
 
 app.whenReady().then(createWindow)

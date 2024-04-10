@@ -19,6 +19,8 @@ export enum EChannel {
   ReadFile = 'read-file',
 
   OpenDir = 'open-dir',
+
+  OpenInBrowser = 'open-in-browser',
 }
 
 export enum ECommon {

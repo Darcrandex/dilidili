@@ -7,14 +7,9 @@
 import { EChannel, EStorage } from '@electron/enums'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button } from 'antd'
-import { useEffect } from 'react'
-
-const taskStatusMap = new Map([
-  [1, '下载中'],
-  [2, '合并中'],
-  [3, '完成'],
-  [4, '下载失败'],
-])
+import Modal from 'antd/es/modal/Modal'
+import { useEffect, useState } from 'react'
+import TaskItem from './TaskItem'
 
 export default function Tasks() {
   const queryClient = useQueryClient()
@@ -41,34 +36,32 @@ export default function Tasks() {
     }
   }, [queryClient])
 
+  const [open, setOpen] = useState(false)
   const onRemoveAll = async () => {
     await window.ipcRenderer.invoke(EChannel.SetStore, { [EStorage.DownloadTasks]: [] })
     queryClient.invalidateQueries({ queryKey: ['tasks'] })
-  }
-
-  const onOpenDir = async (folderDir: string) => {
-    await window.ipcRenderer.invoke(EChannel.OpenDir, folderDir)
+    setOpen(false)
   }
 
   return (
     <>
-      <h1>Tasks</h1>
+      <div className='m-4 space-x-4'>
+        <Button onClick={() => setOpen(true)}>清空下载任务</Button>
+        <Button onClick={() => queryClient.invalidateQueries({ queryKey: ['tasks'] })}>刷新</Button>
+      </div>
 
-      <Button onClick={onRemoveAll}>清空</Button>
-
-      <ol className='list-decimal p-4'>
+      <ul className='m-4 space-y-4'>
         {taskList?.map((v) => (
           <li key={v.id}>
-            <p>{v.id}</p>
-            <p>{taskStatusMap.get(v.status)}</p>
-            <p>{v.params.videoInfo.title}</p>
-
-            <Button disabled={v.status !== 3 || !v.folderDir} onClick={() => onOpenDir(v.folderDir)}>
-              打开文件夹
-            </Button>
+            <TaskItem task={v} />
           </li>
         ))}
-      </ol>
+      </ul>
+
+      <Modal title='提示' open={open} onOk={onRemoveAll} onCancel={() => setOpen(false)}>
+        <p>确定要清空下载任务吗?</p>
+        <p>此操作不会删除已下载的文件</p>
+      </Modal>
     </>
   )
 }
