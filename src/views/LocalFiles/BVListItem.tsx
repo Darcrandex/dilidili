@@ -4,9 +4,11 @@
  * @author darcrand
  */
 
+import { FolderOpenOutlined } from '@ant-design/icons'
 import { EChannel } from '@electron/enums'
-import { Button } from 'antd'
+import { Button, Space } from 'antd'
 import dayjs from 'dayjs'
+import { useMemo } from 'react'
 
 export type BVListItemProps = {
   localFolderDir: string
@@ -15,29 +17,56 @@ export type BVListItemProps = {
 }
 
 export default function BVListItem(props: BVListItemProps) {
-  if (!props.videoInfo) return null
+  const dateLabel = useMemo(() => {
+    if (!props.videoInfo) return ''
+
+    const d = dayjs(props.videoInfo.pubdate * 1000)
+    const isSameDay = d.isSame(new Date(), 'day')
+    const isSameYear = d.isSame(new Date(), 'year')
+    if (isSameDay) return d.format('HH:mm')
+    if (isSameYear) return d.format('MM-DD')
+    return d.format('YYYY-MM-DD')
+  }, [props])
 
   const onOpenDir = async () => {
     await window.ipcRenderer.invoke(EChannel.OpenDir, props.localFolderDir)
   }
 
+  if (!props.videoInfo) return null
+
   return (
     <>
-      <article className='p-4'>
+      <article className='space-y-2'>
         <img
           src={props.videoInfo.pic}
           alt=''
           referrerPolicy='no-referrer'
-          className='block w-full h-36 rounded-md object-cover'
+          className='block w-full h-36 rounded-md object-cover cursor-pointer hover:opacity-80 transition-all'
+          onClick={() =>
+            window.ipcRenderer.invoke(EChannel.OpenInBrowser, `https://www.bilibili.com/video/${props.videoInfo?.bvid}`)
+          }
         />
-        <p className='truncate'>{props.videoInfo.title}</p>
+        <p className='h-12 leading-6 overflow-clip'>{props.videoInfo.title}</p>
 
         <p className='flex items-center justify-between'>
-          <span>up: {props.videoInfo.owner.name}</span>
-          <span>{dayjs(props.videoInfo.pubdate * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>
-        </p>
+          <label
+            className='text-sm text-gray-400 hover:text-primary transition-colors cursor-pointer'
+            onClick={() =>
+              window.ipcRenderer.invoke(
+                EChannel.OpenInBrowser,
+                `https://space.bilibili.com/${props.videoInfo?.owner.mid}`,
+              )
+            }
+          >
+            <span>{props.videoInfo.owner.name}</span>
+            <b className='inline-block mx-2'>·</b>
+            <span>{dateLabel}</span>
+          </label>
 
-        <Button onClick={onOpenDir}>打开本地文件夹</Button>
+          <Space>
+            <Button type='link' title='打开文件夹' icon={<FolderOpenOutlined />} onClick={onOpenDir} />
+          </Space>
+        </p>
       </article>
     </>
   )

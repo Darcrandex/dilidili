@@ -39,11 +39,13 @@ export function registerDownloadBVHandler() {
     try {
       // 服务端有请求频次限制
       await sleep(200 + Math.random() * 1000)
+
       await downloadFile(params.videoDownloadUrl, videoTemp)
       await sleep(200 + Math.random() * 1000)
       await downloadFile(params.audioDownloadUrl, audioTemp)
       await sleep(200 + Math.random() * 1000)
       await downloadFile(params.coverImageUrl, coverImagePath)
+      await sleep(200 + Math.random() * 1000)
       await saveToJSONFile(videoInfoPath, params.videoInfo)
       taskModel.update(newTask.id, { status: ETaskStatus.Mixing })
 
@@ -59,6 +61,7 @@ export function registerDownloadBVHandler() {
       taskModel.update(newTask.id, { status: ETaskStatus.Failed })
     } finally {
       // 删除临时文件
+      await sleep(200 + Math.random() * 1000)
       await promises.unlink(videoTemp)
       await promises.unlink(audioTemp)
     }

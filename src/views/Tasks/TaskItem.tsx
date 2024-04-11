@@ -61,7 +61,7 @@ export default function TaskItem(props: TaskItemProps) {
           src={props.task.params.videoInfo.pic}
           alt=''
           referrerPolicy='no-referrer'
-          className='block w-32 h-24 rounded-md object-cover'
+          className='block w-36 h-24 rounded-md object-cover'
         />
 
         <article className='group flex-1 flex flex-col py-2'>

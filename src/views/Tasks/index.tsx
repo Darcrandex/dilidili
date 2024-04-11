@@ -8,7 +8,7 @@ import { EChannel, EStorage } from '@electron/enums'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button } from 'antd'
 import Modal from 'antd/es/modal/Modal'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import TaskItem from './TaskItem'
 
 export default function Tasks() {
@@ -21,25 +21,11 @@ export default function Tasks() {
     },
   })
 
-  // 监听 store 更新
-  useEffect(() => {
-    const listener = (_event: any, key: string) => {
-      if (key === EStorage.DownloadTasks) {
-        queryClient.invalidateQueries({ queryKey: ['tasks'] })
-      }
-    }
-
-    window.ipcRenderer.on(EChannel.StoreUpdated, listener)
-
-    return () => {
-      window.ipcRenderer.off(EChannel.StoreUpdated, listener)
-    }
-  }, [queryClient])
-
   const [open, setOpen] = useState(false)
   const onRemoveAll = async () => {
     await window.ipcRenderer.invoke(EChannel.SetStore, { [EStorage.DownloadTasks]: [] })
     queryClient.invalidateQueries({ queryKey: ['tasks'] })
+    queryClient.invalidateQueries({ queryKey: ['local-files', 'bv-tree'] })
     setOpen(false)
   }
 
