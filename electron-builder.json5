@@ -2,7 +2,7 @@
  * @see https://www.electron.build/configuration/configuration
  */
 {
-  appId: 'just',
+  appId: 'com.darcrand.dilidili',
   asar: true,
   directories: {
     output: 'release/${version}',

@@ -6,17 +6,16 @@
 
 import { mediaService } from '@/services/media'
 import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-design/icons'
-import { EChannel, EStorage } from '@electron/enums'
+import { EChannel, EStorage, ETaskStatus } from '@electron/enums'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Popconfirm, Tag } from 'antd'
 import { useMemo } from 'react'
 
 const statusOptions = [
-  { value: 1, label: '下载中', color: 'processing', icon: <SyncOutlined spin /> },
-  { value: 2, label: '合并中', color: 'processing', icon: <SyncOutlined spin /> },
-  { value: 3, label: '完成', color: 'success', icon: <CheckCircleOutlined /> },
-  { value: 4, label: '下载失败', color: 'error', icon: <CloseCircleOutlined /> },
-  { value: 0, label: '未知错误', color: 'error', icon: <CloseCircleOutlined /> },
+  { value: ETaskStatus.Downloading, label: '下载中', color: 'processing', icon: <SyncOutlined spin /> },
+  { value: ETaskStatus.Mixing, label: '合并中', color: 'processing', icon: <SyncOutlined spin /> },
+  { value: ETaskStatus.Finished, label: '完成', color: 'success', icon: <CheckCircleOutlined /> },
+  { value: ETaskStatus.Failed, label: '下载失败', color: 'error', icon: <CloseCircleOutlined /> },
 ]
 
 export type TaskItemProps = {

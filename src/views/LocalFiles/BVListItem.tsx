@@ -10,7 +10,7 @@ import dayjs from 'dayjs'
 
 export type BVListItemProps = {
   localFolderDir: string
-  videoInfo: MainProcess.VideoInfoSchema
+  videoInfo: MainProcess.VideoInfoSchema | null
   localInfo: MainProcess.BVTreeWithInfo['bvs'][number]['localInfo']
 }
 

@@ -5,6 +5,7 @@
  */
 
 import TopHeader from '@/components/TopHeader'
+import UScrollView from '@/ui/UScrollView'
 import UTabs from '@/ui/UTabs'
 import { Suspense } from 'react'
 import { Outlet, useMatch, useNavigate } from 'react-router-dom'
@@ -35,11 +36,11 @@ export default function Home() {
           </nav>
         </TopHeader>
 
-        <main className='flex-1 overflow-auto'>
+        <UScrollView className='flex-1 overflow-auto'>
           <Suspense fallback='loading...'>
             <Outlet />
           </Suspense>
-        </main>
+        </UScrollView>
       </section>
     </>
   )

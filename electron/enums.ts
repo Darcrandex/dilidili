@@ -34,3 +34,10 @@ export enum EStorage {
 
   DownloadTasks = 'downloadTasks',
 }
+
+export enum ETaskStatus {
+  Failed = 0,
+  Downloading = 1,
+  Mixing = 2,
+  Finished = 3,
+}

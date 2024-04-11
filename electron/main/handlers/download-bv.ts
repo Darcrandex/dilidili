@@ -1,4 +1,4 @@
-import { EChannel, ECommon, EStorage } from '@electron/enums'
+import { EChannel, ECommon, EStorage, ETaskStatus } from '@electron/enums'
 import { BrowserWindow, ipcMain } from 'electron'
 import ffmpegPath from 'ffmpeg-static'
 import FfmpegCommand from 'fluent-ffmpeg'
@@ -33,7 +33,7 @@ export function registerDownloadBVHandler() {
     const outputPath = path.resolve(folderDir, `${outputFileName}.mp4`)
 
     // 任务开始
-    const newTask: MainProcess.DownloadTask = { id, status: 1, params, folderDir }
+    const newTask: MainProcess.DownloadTask = { id, status: ETaskStatus.Downloading, params, folderDir }
     taskModel.create(newTask)
 
     try {
@@ -45,18 +45,18 @@ export function registerDownloadBVHandler() {
       await sleep(200 + Math.random() * 1000)
       await downloadFile(params.coverImageUrl, coverImagePath)
       await saveToJSONFile(videoInfoPath, params.videoInfo)
-      taskModel.update(newTask.id, { status: 2 })
+      taskModel.update(newTask.id, { status: ETaskStatus.Mixing })
 
       // 音视频混流
       await mixing(videoTemp, audioTemp, outputPath)
 
       // 任务完成
-      taskModel.update(newTask.id, { status: 3 })
+      taskModel.update(newTask.id, { status: ETaskStatus.Finished })
     } catch (error) {
       console.error('混流失败\n', { videoTemp, audioTemp, outputPath }, error)
 
       // 任务失败
-      taskModel.update(newTask.id, { status: 0 })
+      taskModel.update(newTask.id, { status: ETaskStatus.Failed })
     } finally {
       // 删除临时文件
       await promises.unlink(videoTemp)
