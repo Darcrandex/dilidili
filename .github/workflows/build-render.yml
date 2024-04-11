@@ -31,7 +31,6 @@ jobs:
           release_name: Release v${{ steps.get_version.outputs.version }}
           draft: false
           prerelease: false
-        env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Upload Release Asset
