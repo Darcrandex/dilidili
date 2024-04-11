@@ -15,7 +15,7 @@ export default function TopHeader(props: TopHeaderProps) {
   return (
     <>
       <header className={cls('flex items-center p-4 border-b', props.className)}>
-        <h1>dilidili</h1>
+        <img src='/dilidili-logo.png' alt='dilidili' className='w-12' />
 
         {props.children}
       </header>
