@@ -4,7 +4,7 @@
  * @author darcrand
  */
 
-import logoImage from '@/assets/dilidili-logo-small.png'
+import logoImage from '@/assets/logos/dilidili-logo1@0.25x.png'
 import LoginModal from '@/components/LoginModal'
 import { userService } from '@/services/user'
 import { useSession } from '@/stores/session'
@@ -34,7 +34,7 @@ export default function TopHeader(props: TopHeaderProps) {
   return (
     <>
       <header className={cls('flex items-center p-4 border-b', props.className)}>
-        <img src={logoImage} alt='dilidili' className='w-12' />
+        <img src={logoImage} alt='dilidili' className='w-16' />
 
         {props.children}
 

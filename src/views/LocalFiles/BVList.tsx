@@ -32,16 +32,18 @@ export default function BVList(props: BVListProps) {
 
   const { data, pagination } = usePagination(
     async (params) => {
-      const skip = (params.current - 1) * PAGE_SIZE
+      const skip = (params.current - 1) * params.pageSize
 
       return {
         list: (flattenVideoInfos || [])
           .filter((v) => !debouncedValue || v.info?.title.includes(debouncedValue))
-          .slice(skip, skip + PAGE_SIZE),
+          .slice(skip, skip + params.pageSize),
         total: flattenVideoInfos?.length || 0,
       }
     },
     {
+      defaultCurrent: 1,
+      defaultPageSize: PAGE_SIZE,
       refreshDeps: [debouncedValue, flattenVideoInfos],
     },
   )
@@ -72,6 +74,7 @@ export default function BVList(props: BVListProps) {
       </ul>
 
       <Pagination
+        className='text-center'
         current={pagination.current}
         pageSize={pagination.pageSize}
         total={data?.total}

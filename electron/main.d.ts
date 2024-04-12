@@ -197,6 +197,7 @@ declare namespace MainProcess {
   // 下载任务
   interface DownloadTask {
     id: string
+    createdAt: number
     status: number
     params: DownloadBVParams
     folderDir: string // bv 视频文件夹

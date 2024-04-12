@@ -59,7 +59,7 @@ export default function UTabs(props: UTabsProps) {
           className='absolute left-0 bottom-0 m-0 text-center transition-all duration-300 pointer-events-none'
           style={style}
         >
-          <i className='absolute left-1/2 top-0 w-6 h-1 bg-primary rounded-lg -translate-x-1/2'></i>
+          <i className='absolute left-1/2 top-0 w-6 h-1 bg-primary -translate-x-1/2'></i>
         </li>
       </ul>
     </>

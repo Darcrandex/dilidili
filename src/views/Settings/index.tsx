@@ -26,6 +26,9 @@ export default function Settings() {
               <Input value={rootPath} readOnly />
               <Button onClick={() => onSelectRootPath()}>更改目录</Button>
             </div>
+            <Button className='mt-2' type='link' onClick={() => window.ipcRenderer.invoke(EChannel.OpenDir, rootPath)}>
+              查看当前目录
+            </Button>
           </Form.Item>
         </Form>
 

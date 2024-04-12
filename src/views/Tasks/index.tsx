@@ -6,8 +6,9 @@
 
 import { EChannel, EStorage } from '@electron/enums'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button } from 'antd'
+import { Button, Empty } from 'antd'
 import Modal from 'antd/es/modal/Modal'
+import { reverse } from 'ramda'
 import { useState } from 'react'
 import TaskItem from './TaskItem'
 
@@ -17,7 +18,7 @@ export default function Tasks() {
     queryKey: ['tasks'],
     queryFn: async () => {
       const res: MainProcess.DownloadTask[] = await window.ipcRenderer.invoke(EChannel.GetStore, EStorage.DownloadTasks)
-      return res
+      return reverse(res)
     },
   })
 
@@ -32,7 +33,9 @@ export default function Tasks() {
   return (
     <>
       <div className='m-4 space-x-4'>
-        <Button onClick={() => setOpen(true)}>清空下载任务</Button>
+        <Button disabled={taskList?.length === 0} onClick={() => setOpen(true)}>
+          清空下载任务
+        </Button>
         <Button onClick={() => queryClient.invalidateQueries({ queryKey: ['tasks'] })}>刷新</Button>
       </div>
 
@@ -43,6 +46,8 @@ export default function Tasks() {
           </li>
         ))}
       </ul>
+
+      {taskList?.length === 0 && <Empty description='暂无下载任务' />}
 
       <Modal title='提示' open={open} onOk={onRemoveAll} onCancel={() => setOpen(false)}>
         <p>确定要清空下载任务吗?</p>

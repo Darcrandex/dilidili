@@ -9,6 +9,7 @@ import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-des
 import { EChannel, EStorage, ETaskStatus } from '@electron/enums'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Popconfirm, Tag } from 'antd'
+import dayjs from 'dayjs'
 import { useMemo } from 'react'
 
 const statusOptions = [
@@ -72,6 +73,7 @@ export default function TaskItem(props: TaskItemProps) {
 
             <Tag color={status?.color} icon={status?.icon}>
               {status?.label}
+              {`\t[${dayjs(props.task.createdAt).format('YYYY-MM-DD HH:mm:ss')}]`}
             </Tag>
 
             <Tag>{qualityLabel}</Tag>

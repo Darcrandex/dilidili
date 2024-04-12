@@ -41,14 +41,14 @@ export default function BVListItem(props: BVListItemProps) {
           src={props.videoInfo.pic}
           alt=''
           referrerPolicy='no-referrer'
-          className='block w-full h-36 rounded-md object-cover cursor-pointer hover:opacity-80 transition-all'
+          className='block w-full h-40 rounded-md object-cover cursor-pointer hover:opacity-80 transition-all'
           onClick={() =>
             window.ipcRenderer.invoke(EChannel.OpenInBrowser, `https://www.bilibili.com/video/${props.videoInfo?.bvid}`)
           }
         />
-        <p className='h-12 leading-6 overflow-clip'>{props.videoInfo.title}</p>
+        <div className='h-12 leading-6 overflow-clip'>{props.videoInfo.title}</div>
 
-        <p className='flex items-center justify-between'>
+        <div className='flex items-center justify-between'>
           <label
             className='text-sm text-gray-400 hover:text-primary transition-colors cursor-pointer'
             onClick={() =>
@@ -66,7 +66,7 @@ export default function BVListItem(props: BVListItemProps) {
           <Space>
             <Button type='link' title='打开文件夹' icon={<FolderOpenOutlined />} onClick={onOpenDir} />
           </Space>
-        </p>
+        </div>
       </article>
     </>
   )
