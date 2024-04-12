@@ -21,7 +21,9 @@ jobs:
 
       - name: Get version from package.json
         id: get_version
-        run: echo ::set-output name=version::$(node -e "console.log(require('./package.json').version)")
+        run: |
+          $json = Get-Content ./package.json -Raw | ConvertFrom-Json
+          echo "::set-output name=version::$json.version"
 
       - name: Create Release
         id: create_release
