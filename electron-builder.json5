@@ -5,22 +5,23 @@
   appId: 'com.darcrand.dilidili',
   asar: true,
   directories: {
-    output: 'release/${version}',
+    output: 'release',
   },
+
   files: ['dist-electron', 'dist'],
 
   mac: {
-    artifactName: '${productName}_${version}.${ext}',
+    artifactName: '${productName}.${ext}',
     target: ['zip'],
   },
   win: {
     target: [
       {
-        target: 'nsis',
+        target: 'zip',
         arch: ['x64'],
       },
     ],
-    artifactName: '${productName}_${version}.${ext}',
+    artifactName: '${productName}.${ext}',
   },
   nsis: {
     oneClick: false,
