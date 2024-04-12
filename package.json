@@ -1,6 +1,6 @@
 {
   "name": "dilidili",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist-electron/main/index.js",
   "description": "Electron Vite React boilerplate.",
   "type": "module",
