@@ -37,7 +37,7 @@ export default function Home() {
         </TopHeader>
 
         <UScrollView className='flex-1 overflow-auto'>
-          <Suspense fallback='loading...'>
+          <Suspense fallback={null}>
             <Outlet />
           </Suspense>
         </UScrollView>

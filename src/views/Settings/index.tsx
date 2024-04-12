@@ -6,7 +6,7 @@
 
 import { useRootPath } from '@/stores/root-path'
 import { EChannel } from '@electron/enums'
-import { Button, Space } from 'antd'
+import { Button, Form, Input } from 'antd'
 
 export default function Settings() {
   const [rootPath, setRootPath] = useRootPath()
@@ -19,14 +19,22 @@ export default function Settings() {
 
   return (
     <>
-      <h1>Settings</h1>
+      <section className='m-10'>
+        <Form layout='vertical'>
+          <Form.Item label='视频根目录'>
+            <div className='flex space-x-2'>
+              <Input value={rootPath} readOnly />
+              <Button onClick={() => onSelectRootPath()}>更改目录</Button>
+            </div>
+          </Form.Item>
+        </Form>
 
-      <p>rootPath: {rootPath}</p>
-
-      <Space>
-        <Button onClick={() => onSelectRootPath()}>选择文件夹目录</Button>
-        <Button>清空缓存</Button>
-      </Space>
+        <Form layout='vertical'>
+          <Form.Item label='缓存操作'>
+            <Button>清空缓存</Button>
+          </Form.Item>
+        </Form>
+      </section>
     </>
   )
 }

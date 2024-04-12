@@ -15,7 +15,7 @@ export default function Root() {
         <AsideMenus />
 
         <main className='flex-1'>
-          <Suspense fallback='loading...'>
+          <Suspense fallback={null}>
             <Outlet />
           </Suspense>
         </main>
