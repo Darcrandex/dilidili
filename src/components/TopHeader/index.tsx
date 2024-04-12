@@ -4,7 +4,7 @@
  * @author darcrand
  */
 
-import logoImage from '@/assets/dilidili-logo.png'
+import logoImage from '@/assets/dilidili-logo-small.png'
 import LoginModal from '@/components/LoginModal'
 import { userService } from '@/services/user'
 import { useSession } from '@/stores/session'

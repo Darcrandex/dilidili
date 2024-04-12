@@ -65,7 +65,7 @@ export default function BVList(props: BVListProps) {
 
       <ul className='flex flex-wrap'>
         {data?.list?.map((v) => (
-          <li key={v.bvid} className='p-4 sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4'>
+          <li key={v.bvid} className='p-4 w-full sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4 2xl:w-1/6'>
             <BVListItem localFolderDir={v.dir} videoInfo={v.info} localInfo={v.localInfo} />
           </li>
         ))}
