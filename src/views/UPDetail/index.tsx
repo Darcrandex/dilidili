@@ -14,6 +14,7 @@ import { EChannel } from '@electron/enums'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDebounce, usePagination } from 'ahooks'
 import { Button, Input, Pagination, Popconfirm } from 'antd'
+import { isNotNil } from 'ramda'
 import { useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -51,6 +52,10 @@ export default function UPDetail() {
 
       return {
         list: (bvs || [])
+          .slice()
+          .sort((a, b) =>
+            isNotNil(a.info?.pubdate) && isNotNil(b.info?.pubdate) ? b.info?.pubdate - a.info?.pubdate : 0,
+          )
           .filter((v) => !debouncedValue || v.info?.title.includes(debouncedValue))
           .slice(skip, skip + params.pageSize),
         total: bvs?.length || 0,
