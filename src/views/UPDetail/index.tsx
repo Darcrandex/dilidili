@@ -1,6 +1,6 @@
 /**
  * @name UPDetail
- * @description
+ * @description UP主文件夹详情
  * @author darcrand
  */
 
@@ -78,17 +78,17 @@ export default function UPDetail() {
               <img
                 src={data?.card?.face}
                 alt=''
-                className='w-16 h-16 rounded-full border-2 border-white'
+                className='w-20 h-20 rounded-full border-2 border-white'
                 referrerPolicy='no-referrer'
               />
 
-              <div className='mx-4'>
+              <div className='flex-1 mx-4'>
                 <p className='leading-8 transition-all text-primary'>{data?.card?.name}</p>
                 <p className='text-sm text-gray-500'>{data?.card.Official.title || '这个 up 没有简介~~'}</p>
                 <p className='text-sm text-gray-500'>{data?.card.sign}</p>
               </div>
 
-              <div className='!ml-auto shrink-0 space-x-2'>
+              <div className='flex flex-col space-y-2'>
                 <Button
                   icon={<FolderOpenOutlined />}
                   onClick={() => window.ipcRenderer.invoke(EChannel.OpenDir, upFolderDir)}

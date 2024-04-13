@@ -8,7 +8,7 @@ import path from 'node:path'
 import { pipeline as streamPipeline } from 'node:stream/promises'
 import userAgents from 'user-agents'
 import { globalStore } from '../global-store'
-import { sleep, uuid } from '../utils/common'
+import { uuid } from '../utils/common'
 
 // 下载 bilibili 视频，封面，等内容
 export function registerDownloadBVHandler() {
@@ -44,19 +44,18 @@ export function registerDownloadBVHandler() {
 
     try {
       // 服务端有请求频次限制
-      await sleep(200 + Math.random() * 1000)
+      await stepDelay()
 
       await downloadFile(params.videoDownloadUrl, videoTemp)
-      await sleep(200 + Math.random() * 1000)
+      await stepDelay()
       await downloadFile(params.audioDownloadUrl, audioTemp)
-      await sleep(200 + Math.random() * 1000)
+      await stepDelay()
       await downloadFile(params.coverImageUrl, coverImagePath)
-      await sleep(200 + Math.random() * 1000)
+      await stepDelay()
       await saveToJSONFile(videoInfoPath, params.videoInfo)
       taskModel.update(newTask.id, { status: ETaskStatus.Mixing })
 
       // 音视频混流
-      await sleep(200 + Math.random() * 1000)
       await mixing(videoTemp, audioTemp, outputPath)
 
       // 任务完成
@@ -68,7 +67,7 @@ export function registerDownloadBVHandler() {
       taskModel.update(newTask.id, { status: ETaskStatus.Failed })
     } finally {
       // 删除临时文件
-      await sleep(200 + Math.random() * 1000)
+      await stepDelay()
       await promises.unlink(videoTemp)
       await promises.unlink(audioTemp)
     }
@@ -109,7 +108,6 @@ async function mixing(videoPath = '', audioPath = '', outputPath = '') {
       .input(audioPath)
       .videoCodec('copy')
       .audioCodec('copy')
-      // .outputOptions(['-c:v copy', '-c:a copy'])
       .on('error', reject)
       .on('end', () => resolve())
       .save(outputPath)
@@ -172,3 +170,5 @@ const taskModel = {
     })
   },
 }
+
+const stepDelay = async () => new Promise((resolve) => setTimeout(resolve, 100 + Math.random() * 500))
