@@ -22,7 +22,7 @@ export default function Settings() {
     <>
       <TopHeader showLogo={false} />
 
-      <section className='m-10'>
+      <div className='max-w-256 mx-auto p-4'>
         <Form layout='vertical'>
           <Form.Item label='视频根目录'>
             <div className='flex space-x-2'>
@@ -40,7 +40,7 @@ export default function Settings() {
             <Button>清空缓存</Button>
           </Form.Item>
         </Form>
-      </section>
+      </div>
     </>
   )
 }

@@ -8,6 +8,7 @@ const Settings = lazy(() => import('@/views/Settings'))
 const Tasks = lazy(() => import('@/views/Tasks'))
 const LocalFiles = lazy(() => import('@/views/LocalFiles'))
 const Search = lazy(() => import('@/views/Search'))
+const BVDetail = lazy(() => import('@/views/BVDetail'))
 
 export const routes: RouteObject[] = [
   {
@@ -31,5 +32,10 @@ export const routes: RouteObject[] = [
       { path: 'mine', element: <Mine /> },
       { path: 'settings', element: <Settings /> },
     ],
+  },
+
+  {
+    path: '/bv/:id',
+    element: <BVDetail />,
   },
 ]

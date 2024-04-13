@@ -37,7 +37,7 @@ export default function App() {
 
   return (
     <>
-      <Suspense fallback='loading...'>
+      <Suspense fallback={null}>
         <RouterProvider router={router} />
       </Suspense>
     </>

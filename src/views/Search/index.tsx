@@ -34,7 +34,7 @@ export default function Search() {
   }, [text])
 
   const { data: videoInfo } = useQuery({
-    queryKey: ['video', text],
+    queryKey: ['video', 'info', bvid, text],
     enabled: !!bvid,
     queryFn: () => mediaService.info(bvid),
   })
@@ -43,70 +43,72 @@ export default function Search() {
 
   return (
     <>
-      <section className='w-144 max-w-full mx-auto my-4 space-y-4'>
-        <Input.Search
-          placeholder='输入视频地址以搜索'
-          enterButton
-          defaultValue={text}
-          allowClear
-          onSearch={(v) => setState({ text: v })}
-        />
+      <div className='max-w-256 mx-auto p-4'>
+        <section className='my-4 space-y-4'>
+          <Input.Search
+            placeholder='输入视频地址以搜索'
+            enterButton
+            defaultValue={text}
+            allowClear
+            onSearch={(v) => setState({ text: v })}
+          />
 
-        {!!videoInfo && (
-          <>
-            <article className='flex items-center'>
-              <img
-                src={videoInfo.owner.face}
-                alt=''
-                referrerPolicy='no-referrer'
-                className='block w-14 h-14 mr-2 rounded-full border border-white'
-              />
+          {!!videoInfo && (
+            <>
+              <article className='flex items-center'>
+                <img
+                  src={videoInfo.owner.face}
+                  alt=''
+                  referrerPolicy='no-referrer'
+                  className='block w-14 h-14 mr-2 rounded-full border border-white'
+                />
 
-              <div>
-                <p
-                  onClick={() =>
-                    window.ipcRenderer.invoke(
-                      EChannel.OpenInBrowser,
-                      `https://space.bilibili.com/${videoInfo.owner.mid}`,
-                    )
-                  }
-                  className='truncate text-primary cursor-pointer transition-colors hover:opacity-80'
-                >
-                  {videoInfo.owner.name}
-                </p>
-                <p>MID: {videoInfo.owner.mid}</p>
-              </div>
-            </article>
+                <div>
+                  <p
+                    onClick={() =>
+                      window.ipcRenderer.invoke(
+                        EChannel.OpenInBrowser,
+                        `https://space.bilibili.com/${videoInfo.owner.mid}`,
+                      )
+                    }
+                    className='text-sm text-primary cursor-pointer transition-colors hover:opacity-80'
+                  >
+                    {videoInfo.owner.name}
+                  </p>
+                  <p className='text-sm text-gray-500'>MID: {videoInfo.owner.mid}</p>
+                </div>
+              </article>
 
-            <h2>{videoInfo.title}</h2>
+              <h2 className='font-bold'>{videoInfo.title}</h2>
 
-            <img src={videoInfo.pic} alt='' referrerPolicy='no-referrer' className='hidden w-full rounded-lg' />
+              <img src={videoInfo.pic} alt='' referrerPolicy='no-referrer' className='hidden w-full rounded-lg' />
 
-            <iframe src={iframeUrl} className='block w-full h-80 rounded-md overflow-hidden' />
+              <iframe src={iframeUrl} className='block w-full h-80 rounded-md overflow-hidden' />
 
-            <p className='text-center'>
-              <DownloadModal
-                videoInfo={videoInfo}
-                defaultPage={p}
-                trigger={(onOpen) => (
-                  <Button size='large' type='primary' icon={<DownloadOutlined />} onClick={onOpen}>
-                    下载视频
-                  </Button>
-                )}
-              />
-            </p>
-
-            {!session && (
               <p className='text-center'>
-                <Button type='link' onClick={() => navigate('/mine', { replace: true })}>
-                  登录
-                </Button>
-                <span>后可以下载 720P 以上的视频哦</span>
+                <DownloadModal
+                  videoInfo={videoInfo}
+                  defaultPage={p}
+                  trigger={(onOpen) => (
+                    <Button size='large' type='primary' icon={<DownloadOutlined />} onClick={onOpen}>
+                      下载视频
+                    </Button>
+                  )}
+                />
               </p>
-            )}
-          </>
-        )}
-      </section>
+
+              {!session && (
+                <p className='text-center'>
+                  <Button type='link' onClick={() => navigate('/mine', { replace: true })}>
+                    登录
+                  </Button>
+                  <span>后可以下载 720P 以上的视频哦</span>
+                </p>
+              )}
+            </>
+          )}
+        </section>
+      </div>
     </>
   )
 }

@@ -9,6 +9,7 @@ import { EChannel } from '@electron/enums'
 import { Button, Space } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export type BVListItemProps = {
   localFolderDir: string
@@ -17,6 +18,8 @@ export type BVListItemProps = {
 }
 
 export default function BVListItem(props: BVListItemProps) {
+  const navigate = useNavigate()
+
   const dateLabel = useMemo(() => {
     if (!props.videoInfo) return ''
 

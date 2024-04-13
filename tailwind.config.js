@@ -16,6 +16,19 @@ export default {
         256: '64rem',
         512: '128rem',
       },
+
+      maxWidth: {
+        128: '32rem',
+        144: '36rem',
+        256: '64rem',
+        512: '128rem',
+      },
+      maxHeight: {
+        128: '32rem',
+        144: '36rem',
+        256: '64rem',
+        512: '128rem',
+      },
     },
   },
 
