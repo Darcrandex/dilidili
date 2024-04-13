@@ -50,6 +50,7 @@ export default function Search() {
             enterButton
             defaultValue={text}
             allowClear
+            autoFocus
             onSearch={(v) => setState({ text: v })}
           />
 
@@ -81,9 +82,12 @@ export default function Search() {
 
               <h2 className='font-bold'>{videoInfo.title}</h2>
 
-              <img src={videoInfo.pic} alt='' referrerPolicy='no-referrer' className='hidden w-full rounded-lg' />
-
-              <iframe src={iframeUrl} className='block w-full h-80 rounded-md overflow-hidden' />
+              <img
+                src={videoInfo.pic}
+                alt=''
+                referrerPolicy='no-referrer'
+                className='block w-full h-80 mx-auto rounded-lg bg-black object-cover'
+              />
 
               <p className='text-center'>
                 <DownloadModal
