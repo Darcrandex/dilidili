@@ -9,6 +9,7 @@ import { registerFetchHandler } from './handlers/fetch'
 import { registerOpenDirHandler } from './handlers/open-dir'
 import { registerOpenInBrowserHandler } from './handlers/open-in-browser'
 import { registerReadDirHandler } from './handlers/read-dir'
+import { registerRemoveDirHandler } from './handlers/remove-dir'
 import { registerSelectDirHandler } from './handlers/select-dir'
 import { registerStorageHandler } from './handlers/storage'
 import { registerWindowControlHandler } from './handlers/win-ctl'
@@ -110,6 +111,7 @@ async function createWindow() {
   registerOpenDirHandler()
   registerOpenInBrowserHandler()
   registerWindowControlHandler()
+  registerRemoveDirHandler()
 }
 
 app.whenReady().then(createWindow)

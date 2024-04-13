@@ -17,7 +17,7 @@ const navs = [
 
 export default function Home() {
   const navigate = useNavigate()
-  const tabKey = useMatch('/home/:tabKey')?.params.tabKey
+  const tabKey = useMatch('/home/:tabKey/*')?.params.tabKey
 
   return (
     <>

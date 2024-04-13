@@ -17,8 +17,8 @@ export enum EChannel {
 
   ReadDir = 'read-dir',
   ReadFile = 'read-file',
-
   OpenDir = 'open-dir',
+  RemoveDir = 'remove-dir',
 
   OpenInBrowser = 'open-in-browser',
 }

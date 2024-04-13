@@ -8,6 +8,7 @@ import LoginModal from '@/components/LoginModal'
 import TopHeader from '@/components/TopHeader'
 import { userService } from '@/services/user'
 import { useSession } from '@/stores/session'
+import { LogoutOutlined } from '@ant-design/icons'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button } from 'antd'
 import { isNotNil } from 'ramda'
@@ -49,7 +50,7 @@ export default function Mine() {
                 <p className='mt-2 text-gray-600'>mid:{profile?.mid}</p>
               </div>
 
-              <Button className='ml-auto' onClick={onLogout}>
+              <Button className='ml-auto' icon={<LogoutOutlined />} onClick={onLogout}>
                 退出登录
               </Button>
             </section>
