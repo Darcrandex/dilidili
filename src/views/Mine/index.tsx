@@ -5,6 +5,7 @@
  */
 
 import LoginModal from '@/components/LoginModal'
+import TopHeader from '@/components/TopHeader'
 import { userService } from '@/services/user'
 import { useSession } from '@/stores/session'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -30,6 +31,8 @@ export default function Mine() {
 
   return (
     <>
+      <TopHeader showLogo={false} />
+
       {isLogin ? (
         <>
           <section className='flex items-center m-10 p-4 rounded-lg bg-slate-50'>
@@ -37,7 +40,7 @@ export default function Mine() {
             <div className='ml-4'>
               <p className='space-x-2'>
                 <span className='font-bold text-xl'>{profile?.uname}</span>
-                <sup className='inline-block text-xs bg-orange-500 text-white'>
+                <sup className='inline-block px-1 text-xs bg-orange-500 text-white'>
                   lv.{profile?.level_info.current_level}
                 </sup>
                 <sup className='rounded-full px-2 py-1 text-xs bg-primary text-white'>{profile.vip_label.text}</sup>

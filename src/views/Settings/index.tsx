@@ -4,6 +4,7 @@
  * @author darcrand
  */
 
+import TopHeader from '@/components/TopHeader'
 import { useRootPath } from '@/stores/root-path'
 import { EChannel } from '@electron/enums'
 import { Button, Form, Input } from 'antd'
@@ -19,6 +20,8 @@ export default function Settings() {
 
   return (
     <>
+      <TopHeader showLogo={false} />
+
       <section className='m-10'>
         <Form layout='vertical'>
           <Form.Item label='视频根目录'>

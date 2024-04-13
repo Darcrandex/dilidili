@@ -23,6 +23,14 @@ export enum EChannel {
   OpenInBrowser = 'open-in-browser',
 }
 
+export enum WindowControl {
+  GetIsMaximized = 'get-is-maximized',
+  ToggleMaximize = 'toggle-maximize',
+  Minimize = 'minimize',
+  Maximize = 'maximize',
+  Close = 'close',
+}
+
 export enum ECommon {
   Referer = 'https://www.bilibili.com',
 }

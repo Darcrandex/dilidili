@@ -11,7 +11,7 @@ import AsideMenus from './AsideMenus'
 export default function Root() {
   return (
     <>
-      <section className='flex h-screen'>
+      <section className='flex-1 flex h-screen'>
         <AsideMenus />
 
         <main className='flex-1'>

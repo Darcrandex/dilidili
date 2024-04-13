@@ -5,58 +5,51 @@
  */
 
 import logoImage from '@/assets/logos/dilidili-logo1@0.25x.png'
-import LoginModal from '@/components/LoginModal'
-import { userService } from '@/services/user'
-import { useSession } from '@/stores/session'
 import { cls } from '@/utils/cls'
-import { useQuery } from '@tanstack/react-query'
+import { BlockOutlined, CloseOutlined, ExpandOutlined, LineOutlined } from '@ant-design/icons'
+import { WindowControl } from '@electron/enums'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button } from 'antd'
-import { isNotNil } from 'ramda'
 import { PropsWithChildren } from 'react'
-import { useNavigate } from 'react-router-dom'
+import './styles.css'
 
 export type TopHeaderProps = PropsWithChildren<{
   className?: string
+  showLogo?: boolean
 }>
 
 export default function TopHeader(props: TopHeaderProps) {
-  const [session] = useSession()
-  const navigate = useNavigate()
-
-  const { data: profile } = useQuery({
-    queryKey: ['profile', session],
-    enabled: !!session,
-    queryFn: () => userService.profile(),
+  const queryClient = useQueryClient()
+  const { data: isMaximized } = useQuery({
+    queryKey: ['window-control', 'is-maximized'],
+    queryFn: async () => {
+      return (await window.ipcRenderer.invoke(WindowControl.GetIsMaximized)) as boolean
+    },
   })
 
-  const isLogin = isNotNil(profile)
+  const onToggleMaximize = async () => {
+    await window.ipcRenderer.invoke(WindowControl.ToggleMaximize)
+    queryClient.invalidateQueries({ queryKey: ['window-control', 'is-maximized'] })
+  }
 
   return (
     <>
-      <header className={cls('flex items-center p-4 border-b', props.className)}>
-        <img src={logoImage} alt='dilidili' className='w-16' />
+      <header className={cls('top-header--draggable relative flex items-center border-b', props.className)}>
+        {props.showLogo !== false && <img src={logoImage} alt='dilidili' className='w-16 m-4' />}
 
-        {props.children}
+        <div className='top-header--undraggable'>{props.children}</div>
 
-        {isLogin ? (
-          <img
-            src={profile?.face}
-            alt='face'
-            referrerPolicy='no-referrer'
-            className='w-10 h-10 rounded-full ml-auto cursor-pointer hover:shadow-md transition-all'
-            onClick={() => navigate('/mine', { replace: true })}
+        <div className='top-header--undraggable self-start ml-auto p-2'>
+          <Button
+            type='link'
+            icon={<LineOutlined />}
+            onClick={() => window.ipcRenderer.invoke(WindowControl.Minimize)}
           />
-        ) : null}
 
-        <LoginModal
-          renderTrigger={(onOpen) =>
-            !isLogin && (
-              <Button className='ml-auto' type='primary' onClick={onOpen}>
-                登录
-              </Button>
-            )
-          }
-        />
+          <Button type='link' icon={isMaximized ? <BlockOutlined /> : <ExpandOutlined />} onClick={onToggleMaximize} />
+
+          <Button type='link' icon={<CloseOutlined />} onClick={() => window.ipcRenderer.invoke(WindowControl.Close)} />
+        </div>
       </header>
     </>
   )

@@ -11,6 +11,7 @@ import { registerOpenInBrowserHandler } from './handlers/open-in-browser'
 import { registerReadDirHandler } from './handlers/read-dir'
 import { registerSelectDirHandler } from './handlers/select-dir'
 import { registerStorageHandler } from './handlers/storage'
+import { registerWindowControlHandler } from './handlers/win-ctl'
 import { update } from './update'
 
 globalThis.__filename = fileURLToPath(import.meta.url)
@@ -62,6 +63,8 @@ async function createWindow() {
     minWidth: 800,
     minHeight: 600,
 
+    frame: false, // 直接隐藏顶部标题栏
+
     icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
     webPreferences: {
       preload,
@@ -73,10 +76,6 @@ async function createWindow() {
       // contextIsolation: false,
     },
   })
-
-  if (process.env.NODE_ENV === 'production') {
-    mainWindow.setMenu(null)
-  }
 
   if (url) {
     // electron-vite-vue#298
@@ -110,6 +109,7 @@ async function createWindow() {
   registerBvInfoHandler()
   registerOpenDirHandler()
   registerOpenInBrowserHandler()
+  registerWindowControlHandler()
 }
 
 app.whenReady().then(createWindow)

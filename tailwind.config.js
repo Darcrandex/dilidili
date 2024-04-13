@@ -7,10 +7,14 @@ export default {
       width: {
         128: '32rem',
         144: '36rem',
+        256: '64rem',
+        512: '128rem',
       },
       height: {
         128: '32rem',
         144: '36rem',
+        256: '64rem',
+        512: '128rem',
       },
     },
   },
