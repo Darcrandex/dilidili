@@ -56,6 +56,7 @@ export function registerDownloadBVHandler() {
       taskModel.update(newTask.id, { status: ETaskStatus.Mixing })
 
       // 音视频混流
+      await sleep(200 + Math.random() * 1000)
       await mixing(videoTemp, audioTemp, outputPath)
 
       // 任务完成
@@ -85,11 +86,12 @@ async function downloadFile(url = '', filePath = '') {
             cookie: `${EStorage.Session}=${globalStore.get(EStorage.Session)}`,
           },
         })
-        .on('error', reject)
-        .on('finish', () => resolve()),
+        .on('error', reject),
 
       createWriteStream(filePath),
     )
+      .then(() => resolve())
+      .catch(reject)
   })
 }
 
@@ -105,7 +107,9 @@ async function mixing(videoPath = '', audioPath = '', outputPath = '') {
       .setFfmpegPath(binaryPath)
       .input(videoPath)
       .input(audioPath)
-      .outputOptions(['-c:v copy', '-c:a copy'])
+      .videoCodec('copy')
+      .audioCodec('copy')
+      // .outputOptions(['-c:v copy', '-c:a copy'])
       .on('error', reject)
       .on('end', () => resolve())
       .save(outputPath)

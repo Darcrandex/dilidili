@@ -74,7 +74,7 @@ export default function UPDetail() {
 
         <UScrollView className='flex-1'>
           <div className='max-w-256 mx-auto p-4'>
-            <article className='flex items-center space-x-4 bg-slate-50 p-4 rounded-lg'>
+            <article className='flex items-center bg-slate-50 p-4 rounded-lg'>
               <img
                 src={data?.card?.face}
                 alt=''
@@ -82,12 +82,13 @@ export default function UPDetail() {
                 referrerPolicy='no-referrer'
               />
 
-              <div>
+              <div className='mx-4'>
                 <p className='leading-8 transition-all text-primary'>{data?.card?.name}</p>
                 <p className='text-sm text-gray-500'>{data?.card.Official.title || '这个 up 没有简介~~'}</p>
+                <p className='text-sm text-gray-500'>{data?.card.sign}</p>
               </div>
 
-              <div className='!ml-auto space-x-2'>
+              <div className='!ml-auto shrink-0 space-x-2'>
                 <Button
                   icon={<FolderOpenOutlined />}
                   onClick={() => window.ipcRenderer.invoke(EChannel.OpenDir, upFolderDir)}
