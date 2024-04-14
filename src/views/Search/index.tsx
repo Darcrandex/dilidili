@@ -43,7 +43,7 @@ export default function Search() {
 
   return (
     <>
-      <div className='max-w-256 mx-auto p-4'>
+      <div className='max-w-xl mx-auto p-4'>
         <section className='mb-4 space-y-4'>
           <Input.Search
             placeholder='输入视频地址以搜索'

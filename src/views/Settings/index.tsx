@@ -22,7 +22,7 @@ export default function Settings() {
     <>
       <TopHeader showLogo={false} />
 
-      <div className='max-w-256 mx-auto p-4'>
+      <div className='max-w-xl mx-auto p-4'>
         <Form layout='vertical'>
           <Form.Item label='视频根目录'>
             <div className='flex space-x-2'>

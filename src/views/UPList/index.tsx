@@ -16,7 +16,7 @@ export default function UPList() {
 
   return (
     <>
-      <section className='max-w-256 p-4 mx-auto'>
+      <section className='max-w-xl p-4 mx-auto'>
         <ul className='space-y-2'>
           {data?.map((v) => (
             <li key={v.mid}>

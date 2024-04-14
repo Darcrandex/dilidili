@@ -31,7 +31,7 @@ export default function UPListItem(props: UPListItemProps) {
         <img
           src={data?.card?.face}
           alt=''
-          className='w-16 h-16 rounded-full border-2 border-white'
+          className='w-16 h-16 rounded-full border-2 border-white bg-slate-200'
           referrerPolicy='no-referrer'
         />
 

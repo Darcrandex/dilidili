@@ -78,18 +78,18 @@ export default function UPDetail() {
         </TopHeader>
 
         <UScrollView className='flex-1'>
-          <div className='max-w-256 mx-auto p-4'>
+          <div className='max-w-xl mx-auto p-4'>
             <article className='flex items-center bg-slate-50 p-4 rounded-lg'>
               <img
                 src={data?.card?.face}
                 alt=''
-                className='w-20 h-20 rounded-full border-2 border-white'
+                className='w-20 h-20 rounded-full border-2 border-white bg-slate-200'
                 referrerPolicy='no-referrer'
               />
 
               <div className='flex-1 mx-4'>
                 <p
-                  className='leading-8 transition-all text-primary cursor-pointer'
+                  className='leading-8 transition-all text-primary cursor-pointer hover:opacity-80'
                   onClick={() =>
                     window.ipcRenderer.invoke(EChannel.OpenInBrowser, `https://space.bilibili.com/${data?.card.mid}`)
                   }
@@ -126,7 +126,7 @@ export default function UPDetail() {
 
             <ul className='flex flex-wrap'>
               {pageData?.list?.map((v) => (
-                <li key={v.bvid} className='p-4 w-full sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4'>
+                <li key={v.bvid} className='p-4 w-full md:w-1/3 lg:w-1/4 xl:w-1/5'>
                   <BVListItem bv={v} showUpName={false} />
                 </li>
               ))}

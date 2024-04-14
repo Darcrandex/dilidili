@@ -49,16 +49,16 @@ export default function BVListItem(props: BVListItemProps) {
           src={info.pic}
           alt=''
           referrerPolicy='no-referrer'
-          className='block w-full h-40 rounded-md object-cover cursor-pointer hover:opacity-80 transition-all'
+          className='block w-full h-36 rounded-md object-cover cursor-pointer hover:opacity-80 transition-all'
           onClick={() =>
             window.ipcRenderer.invoke(EChannel.OpenInBrowser, `https://www.bilibili.com/video/${info.bvid}`)
           }
         />
-        <div className='h-12 leading-6 overflow-clip'>{info.title}</div>
+        <div className='h-12 leading-6 text-sm overflow-clip'>{info.title}</div>
 
         <div className='flex items-center justify-between'>
           <label
-            className='text-sm text-gray-400 hover:text-primary transition-colors cursor-pointer'
+            className='text-xs text-gray-400 hover:text-primary transition-colors cursor-pointer'
             onClick={() =>
               window.ipcRenderer.invoke(EChannel.OpenInBrowser, `https://space.bilibili.com/${info?.owner.mid}`)
             }
