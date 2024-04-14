@@ -25,7 +25,7 @@ export default function App() {
     const listener = (_event: any, key: string) => {
       if (key === EStorage.DownloadTasks) {
         queryClient.invalidateQueries({ queryKey: ['tasks'] })
-        queryClient.invalidateQueries({ queryKey: ['local-files', 'bv-tree'] })
+        queryClient.invalidateQueries({ queryKey: ['local-files'] })
       }
     }
 

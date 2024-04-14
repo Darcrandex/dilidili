@@ -63,7 +63,7 @@ export default function UPDetail() {
     },
     {
       defaultCurrent: 1,
-      defaultPageSize: 48,
+      defaultPageSize: 20,
       refreshDeps: [debouncedValue, bvs],
     },
   )
