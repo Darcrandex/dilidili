@@ -5,9 +5,9 @@
  */
 
 import { mediaService } from '@/services/media'
+import { taskService } from '@/services/tasks'
 import { useSession } from '@/stores/session'
 import { cls } from '@/utils/cls'
-import { EChannel } from '@electron/enums'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useSelections } from 'ahooks'
 import { Button, Checkbox, Col, Modal, Row, Select } from 'antd'
@@ -119,8 +119,7 @@ export default function DownloadModal(props: DownloadModalProps) {
       })
       .filter((v) => Boolean(v.videoDownloadUrl && v.audioDownloadUrl))
 
-    const tasks = taskParamsArr.map((v) => window.ipcRenderer.invoke(EChannel.DownloadBV, v))
-
+    const tasks = taskParamsArr.map(taskService.createTask)
     Promise.all(tasks)
 
     onCancel()

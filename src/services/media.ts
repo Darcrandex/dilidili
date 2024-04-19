@@ -8,7 +8,7 @@ export const mediaService = {
       params: { bvid },
     }),
 
-  // 获取视频下载地址
+  // 获取分P视频下载地址
   playurl: (bvid: string, cid: number) =>
     http<MainProcess.PageInfoSchema>({
       url: 'https://api.bilibili.com/x/player/playurl',

@@ -14,7 +14,7 @@ export const userService = {
       params: { qrcode_key: key },
     }),
 
-  // 获取用户信息
+  // 获取当前登录用户信息
   profile: () => http<MainProcess.UserProfileShchema>({ url: 'https://api.bilibili.com/x/web-interface/nav' }),
 
   // 获取 up 主信息

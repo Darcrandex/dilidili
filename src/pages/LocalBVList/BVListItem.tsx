@@ -4,16 +4,18 @@
  * @author darcrand
  */
 
-import { DeleteOutlined, FolderOpenOutlined, LinkOutlined } from '@ant-design/icons'
-import { EChannel } from '@electron/enums'
+import { ipcActions } from '@/actions'
+import { cls } from '@/utils/cls'
+import { DeleteOutlined, FolderOpenOutlined, LinkOutlined, MoreOutlined } from '@ant-design/icons'
 import { useQueryClient } from '@tanstack/react-query'
-import { Button, Popconfirm } from 'antd'
+import { Button, Dropdown } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
 
 export type BVListItemProps = {
   bv: MainProcess.BVTreeWithInfo['bvs'][number]
   showUpName?: boolean
+  className?: string
 }
 
 export default function BVListItem(props: BVListItemProps) {
@@ -31,27 +33,25 @@ export default function BVListItem(props: BVListItemProps) {
     return d.format('YYYY-MM-DD')
   }, [info])
 
-  const onOpenDir = async () => {
-    await window.ipcRenderer.invoke(EChannel.OpenDir, props.bv.dir)
-  }
+  const onOpenDir = () => ipcActions.openFolder(props.bv.dir)
 
   const onRemoveDir = async () => {
-    await window.ipcRenderer.invoke(EChannel.RemoveDir, props.bv.dir)
-    queryClient.invalidateQueries({ queryKey: ['local-files'] })
+    await ipcActions.deleteFolder(props.bv.dir)
+    queryClient.invalidateQueries({ queryKey: ['bv-list'] })
   }
 
   const openVideo = async () => {
     if (!Array.isArray(localInfo?.videoPaths) || localInfo.videoPaths.length === 0) return
 
     const filePath = `${props.bv.dir}/${localInfo?.videoPaths[0]}`
-    await window.ipcRenderer.invoke(EChannel.OpenVideoInSystemPlayer, filePath)
+    await ipcActions.openVideo(filePath)
   }
 
   if (!info) return null
 
   return (
     <>
-      <article className='group relative space-y-2'>
+      <article className={cls('group relative space-y-2', props.className)}>
         <img
           src={info.pic}
           alt=''
@@ -69,9 +69,7 @@ export default function BVListItem(props: BVListItemProps) {
         <div className='flex items-center justify-between'>
           <label
             className='text-xs text-gray-400 hover:text-primary transition-colors cursor-pointer'
-            onClick={() =>
-              window.ipcRenderer.invoke(EChannel.OpenInBrowser, `https://space.bilibili.com/${info?.owner.mid}`)
-            }
+            onClick={() => ipcActions.openInBrowser(`https://space.bilibili.com/${info?.owner.mid}`)}
           >
             {props.showUpName !== false && (
               <>
@@ -82,22 +80,23 @@ export default function BVListItem(props: BVListItemProps) {
             <span>{dateLabel}</span>
           </label>
 
-          <div className='space-x-2 transition-all opacity-0 group-hover:opacity-100'>
-            <Button type='link' title='打开文件夹' icon={<FolderOpenOutlined />} onClick={onOpenDir} />
-
-            <Button
-              type='link'
-              title='从B站打开'
-              icon={<LinkOutlined />}
-              onClick={() =>
-                window.ipcRenderer.invoke(EChannel.OpenInBrowser, `https://www.bilibili.com/video/${info.bvid}`)
-              }
-            />
-
-            <Popconfirm title='确定要删除此文件夹以及其中的视频吗?' onConfirm={onRemoveDir}>
-              <Button type='link' title='删除文件夹' icon={<DeleteOutlined />} />
-            </Popconfirm>
-          </div>
+          <Dropdown
+            trigger={['click']}
+            menu={{
+              items: [
+                { key: 'open', icon: <FolderOpenOutlined />, label: '打开文件夹', onClick: onOpenDir },
+                {
+                  key: 'link',
+                  icon: <LinkOutlined />,
+                  label: '从B站打开',
+                  onClick: () => ipcActions.openInBrowser(`https://www.bilibili.com/video/${info.bvid}`),
+                },
+                { key: 'remove', icon: <DeleteOutlined />, label: '删除文件夹', onClick: onRemoveDir },
+              ],
+            }}
+          >
+            <Button shape='circle' type='text' icon={<MoreOutlined />} />
+          </Dropdown>
         </div>
       </article>
     </>

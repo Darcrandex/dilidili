@@ -4,11 +4,20 @@
  * @author darcrand
  */
 
+import { ipcActions } from '@/actions'
 import { mediaService } from '@/services/media'
-import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-design/icons'
-import { EChannel, EStorage, ETaskStatus } from '@electron/enums'
+import { taskService } from '@/services/tasks'
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  DeleteOutlined,
+  DownloadOutlined,
+  FolderOpenOutlined,
+  SyncOutlined,
+} from '@ant-design/icons'
+import { ETaskStatus } from '@electron/enums'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Popconfirm, Tag } from 'antd'
+import { Dropdown, Tag } from 'antd'
 import dayjs from 'dayjs'
 import * as R from 'ramda'
 import { useMemo } from 'react'
@@ -39,20 +48,12 @@ export default function TaskItem(props: TaskItemProps) {
     return playurlData.support_formats.find((item) => item.quality === props.task.params.quality)?.new_description
   }, [playurlData, props.task.params.quality])
 
-  const onOpenDir = async (folderDir: string) => {
-    await window.ipcRenderer.invoke(EChannel.OpenDir, folderDir)
-  }
+  const onOpenDir = (folderDir: string) => ipcActions.openFolder(folderDir)
 
   const queryClient = useQueryClient()
 
   const onRemove = async (id: string) => {
-    const prevTasks: MainProcess.DownloadTask[] = await window.ipcRenderer.invoke(
-      EChannel.GetStore,
-      EStorage.DownloadTasks,
-    )
-
-    const updatedTasks = (prevTasks || []).filter((task) => task.id !== id)
-    await window.ipcRenderer.invoke(EChannel.SetStore, { [EStorage.DownloadTasks]: updatedTasks })
+    await taskService.removeTask(id)
     queryClient.invalidateQueries({ queryKey: ['tasks'] })
   }
 
@@ -71,53 +72,54 @@ export default function TaskItem(props: TaskItemProps) {
       videoDownloadUrl,
       audioDownloadUrl,
     }
-    window.ipcRenderer.invoke(EChannel.DownloadBV, params)
+
+    taskService.createTask(params)
   }
 
   return (
     <>
-      <div className='flex space-x-4 rounded-md transition-all hover:bg-gray-50'>
-        <img
-          src={props.task.params.videoInfo.pic}
-          alt=''
-          referrerPolicy='no-referrer'
-          className='block w-36 h-24 rounded-md object-cover'
-        />
+      <Dropdown
+        trigger={['contextMenu']}
+        menu={{
+          items: [
+            {
+              key: 'openDir',
+              icon: <FolderOpenOutlined />,
+              label: '打开文件夹',
+              onClick: () => onOpenDir(props.task.folderDir),
+            },
+            { key: 'reDownload', icon: <DownloadOutlined />, label: '重新下载', onClick: onReDownload },
+            { key: 'remove', icon: <DeleteOutlined />, label: '删除任务', onClick: () => onRemove(props.task.id) },
+          ],
+        }}
+      >
+        <div className='group flex space-x-4 rounded-md transition-all hover:bg-slate-50'>
+          <img
+            src={props.task.params.videoInfo.pic}
+            alt=''
+            referrerPolicy='no-referrer'
+            className='block w-40 h-24 rounded-md object-cover'
+          />
 
-        <article className='group flex-1 flex flex-col py-2'>
-          <p className='flex-1 break-all'>{props.task.params.videoInfo.title}</p>
+          <article className='flex-1 flex flex-col py-2'>
+            <p className='leading-6 h-12 overflow-hidden'>{props.task.params.videoInfo.title}</p>
 
-          <p className='flex flex-wrap text-sm'>
-            <Tag>{props.task.params.videoInfo.owner.name}</Tag>
+            <p className='flex flex-wrap text-sm'>
+              <Tag bordered={false}>UP {props.task.params.videoInfo.owner.name}</Tag>
 
-            <Tag color={status?.color} icon={status?.icon}>
-              {status?.label}
-              {`\t[${dayjs(props.task.createdAt).format('YYYY-MM-DD HH:mm:ss')}]`}
-            </Tag>
-
-            <Tag>{qualityLabel}</Tag>
-
-            <i className='flex-1'></i>
-
-            <Tag
-              className='!opacity-0 group-hover:!opacity-100 cursor-pointer'
-              onClick={() => onOpenDir(props.task.folderDir)}
-            >
-              打开文件夹
-            </Tag>
-
-            <Tag className='!opacity-0 group-hover:!opacity-100 cursor-pointer' onClick={onReDownload}>
-              重新下载
-            </Tag>
-
-            <Popconfirm title='确定要删除此任务吗?' onConfirm={() => onRemove(props.task.id)}>
-              <Tag className='!opacity-0 group-hover:!opacity-100 cursor-pointer' color='red'>
-                删除任务
+              <Tag bordered={false}>
+                P{props.task.params.page} {qualityLabel}
               </Tag>
-            </Popconfirm>
-          </p>
-        </article>
-      </div>
+
+              <Tag bordered={false}>{dayjs(props.task.createdAt).format('YYYY-MM-DD HH:mm:ss')}</Tag>
+
+              <Tag bordered={false} color={status?.color} icon={status?.icon}>
+                {status?.label}
+              </Tag>
+            </p>
+          </article>
+        </div>
+      </Dropdown>
     </>
   )
 }

@@ -27,7 +27,7 @@ export const fsService = {
   },
 
   // 根据 mid 获取 bv 列表
-  getBVListByMid: async (params: { mid?: string; page?: number; pageSize?: number }) => {
+  getBVListByMid: async (params: { mid?: string; page?: number; pageSize?: number; keyword?: string }) => {
     const dirTree: MainProcess.BVTreeWithInfo[] = await window.ipcRenderer.invoke(EChannel.GetBVInfo)
     let bvs: MainProcess.BVTreeWithInfo['bvs'] = []
 
@@ -38,6 +38,10 @@ export const fsService = {
       bvs = matchedBVs
     } else {
       bvs = dirTree.flatMap((m) => m.bvs).filter(hasLocalVideos)
+    }
+
+    if (params.keyword?.trim()) {
+      bvs = bvs.filter((b) => b.info?.title.includes(params.keyword!))
     }
 
     const limit = params.pageSize || 20

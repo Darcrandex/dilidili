@@ -11,6 +11,7 @@ import { useSession } from '@/stores/session'
 import { LogoutOutlined } from '@ant-design/icons'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button } from 'antd'
+import Avatar from 'antd/es/avatar/avatar'
 import { isNotNil } from 'ramda'
 
 export default function Mine() {
@@ -38,7 +39,10 @@ export default function Mine() {
         <>
           <div className='max-w-xl mx-auto p-4'>
             <section className='flex items-center p-4 rounded-lg bg-slate-50'>
-              <img src={profile?.face} alt='face' className='w-20 h-20 rounded-full border border-white' />
+              <Avatar src={profile?.face} alt='face' size={80}>
+                {profile?.uname}
+              </Avatar>
+
               <div className='ml-4'>
                 <p className='space-x-2'>
                   <span className='font-bold text-xl'>{profile?.uname}</span>
@@ -47,7 +51,7 @@ export default function Mine() {
                   </sup>
                   <sup className='rounded-full px-2 py-1 text-xs bg-primary text-white'>{profile.vip_label.text}</sup>
                 </p>
-                <p className='mt-2 text-gray-600'>mid:{profile?.mid}</p>
+                <p className='mt-2 text-gray-500'>MID:{profile?.mid}</p>
               </div>
 
               <Button className='ml-auto' icon={<LogoutOutlined />} onClick={onLogout}>

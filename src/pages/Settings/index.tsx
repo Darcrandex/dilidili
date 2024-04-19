@@ -4,16 +4,16 @@
  * @author darcrand
  */
 
+import { ipcActions } from '@/actions'
 import TopHeader from '@/components/TopHeader'
 import { useRootPath } from '@/stores/root-path'
-import { EChannel } from '@electron/enums'
 import { Button, Form, Input } from 'antd'
 
 export default function Settings() {
   const [rootPath, setRootPath] = useRootPath()
   const onSelectRootPath = async () => {
-    const res = await window.ipcRenderer.invoke(EChannel.SelectDir)
-    if (typeof res === 'string' && res.trim().length > 0) {
+    const res = await ipcActions.selectFolderDir()
+    if (res) {
       setRootPath(res)
     }
   }
@@ -29,7 +29,7 @@ export default function Settings() {
               <Input value={rootPath} readOnly />
               <Button onClick={() => onSelectRootPath()}>更改目录</Button>
             </div>
-            <Button className='mt-2' type='link' onClick={() => window.ipcRenderer.invoke(EChannel.OpenDir, rootPath)}>
+            <Button className='mt-2' type='link' onClick={() => ipcActions.openFolder(rootPath)}>
               查看当前目录
             </Button>
           </Form.Item>

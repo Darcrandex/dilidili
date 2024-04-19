@@ -27,7 +27,7 @@ export default function UTabs(props: UTabsProps) {
 
   useEffect(() => {
     if (refContainer.current) {
-      const targetTabEle = refContainer.current.children[currIndex]
+      const targetTabEle = refContainer.current.children[Math.max(0, currIndex)]
 
       if (targetTabEle) {
         const containerRect = refContainer.current.getBoundingClientRect()

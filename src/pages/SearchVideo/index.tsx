@@ -1,5 +1,5 @@
 /**
- * @name Search
+ * @name SearchVideo
  * @description
  * @author darcrand
  */
@@ -8,7 +8,6 @@ import { mediaService } from '@/services/media'
 import { useSession } from '@/stores/session'
 import { useVideoSearch } from '@/stores/video-search'
 import { DownloadOutlined } from '@ant-design/icons'
-import { EChannel } from '@electron/enums'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Input } from 'antd'
 import qs from 'qs'
@@ -16,7 +15,7 @@ import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DownloadModal from './DownloadModal'
 
-export default function Search() {
+export default function SearchVideo() {
   const navigate = useNavigate()
   const [session] = useSession()
   const [{ text }, setState] = useVideoSearch()
@@ -38,8 +37,6 @@ export default function Search() {
     enabled: !!bvid,
     queryFn: () => mediaService.info(bvid),
   })
-
-  const iframeUrl = bvid ? `https://player.bilibili.com/player.html?bvid=${bvid}&page=${p}` : ''
 
   return (
     <>
@@ -65,17 +62,7 @@ export default function Search() {
                 />
 
                 <div>
-                  <p
-                    onClick={() =>
-                      window.ipcRenderer.invoke(
-                        EChannel.OpenInBrowser,
-                        `https://space.bilibili.com/${videoInfo.owner.mid}`,
-                      )
-                    }
-                    className='text-sm text-primary cursor-pointer transition-colors hover:opacity-80'
-                  >
-                    {videoInfo.owner.name}
-                  </p>
+                  <p className='text-sm cursor-pointer transition-colors hover:opacity-80'>{videoInfo.owner.name}</p>
                   <p className='text-sm text-gray-500'>MID: {videoInfo.owner.mid}</p>
                 </div>
               </article>
@@ -86,7 +73,7 @@ export default function Search() {
                 src={videoInfo.pic}
                 alt=''
                 referrerPolicy='no-referrer'
-                className='block w-full h-80 mx-auto rounded-lg bg-black object-cover'
+                className='block w-full h-80 lg:h-96 rounded-lg bg-black object-contain'
               />
 
               <p className='text-center'>
@@ -94,7 +81,7 @@ export default function Search() {
                   videoInfo={videoInfo}
                   defaultPage={p}
                   trigger={(onOpen) => (
-                    <Button size='large' type='primary' icon={<DownloadOutlined />} onClick={onOpen}>
+                    <Button type='primary' icon={<DownloadOutlined />} onClick={onOpen}>
                       下载视频
                     </Button>
                   )}

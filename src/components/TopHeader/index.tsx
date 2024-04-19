@@ -35,7 +35,7 @@ export default function TopHeader(props: TopHeaderProps) {
   return (
     <>
       <header className={cls('top-header--draggable relative flex items-center border-b', props.className)}>
-        {props.showLogo !== false && <img src={logoImage} alt='dilidili' className='w-auto h-8 mx-4' />}
+        {props.showLogo !== false && <img src={logoImage} alt='dilidili' className='w-auto h-6 mx-4' />}
 
         <div className='top-header--undraggable'>{props.children}</div>
 
