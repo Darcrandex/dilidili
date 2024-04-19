@@ -60,10 +60,10 @@ const indexHtml = join(process.env.DIST, 'index.html')
 async function createWindow() {
   mainWindow = new BrowserWindow({
     title: 'Main window',
-    width: 800,
-    height: 700,
-    minWidth: 800,
-    minHeight: 600,
+    width: 768,
+    height: 768,
+    minWidth: 768,
+    minHeight: 768,
 
     frame: false, // 直接隐藏顶部标题栏
 
