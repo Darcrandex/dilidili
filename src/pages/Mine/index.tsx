@@ -51,7 +51,7 @@ export default function Mine() {
                   </sup>
                   <sup className='rounded-full px-2 py-1 text-xs bg-primary text-white'>{profile.vip_label.text}</sup>
                 </p>
-                <p className='mt-2 text-gray-500'>MID:{profile?.mid}</p>
+                <p className='mt-2 text-gray-500 text-sm'>MID:{profile?.mid}</p>
               </div>
 
               <Button className='ml-auto' icon={<LogoutOutlined />} onClick={onLogout}>

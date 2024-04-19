@@ -28,7 +28,7 @@ export default function LocalBVList() {
     queryFn: () => userService.getUserByMid(Number.parseInt(mid || '')),
   })
 
-  const { data: bvList } = useQuery({
+  const { data: pageRes } = useQuery({
     refetchOnMount: 'always',
     queryKey: ['bv-list', page, mid, keyword],
     queryFn: () => fsService.getBVListByMid({ mid, page, pageSize: 20, keyword }),
@@ -61,8 +61,8 @@ export default function LocalBVList() {
                   lv.{profile?.card?.level_info?.current_level}
                 </sup>
               </p>
-              <p className='mt-2 text-gray-500'>MID:{mid}</p>
-              <p className='text-gray-500'>{profile.card.sign}</p>
+              <p className='mt-2 text-gray-500 text-sm'>MID:{mid}</p>
+              <p className='text-gray-500 text-sm'>{profile.card.sign}</p>
             </div>
           </section>
         )}
@@ -79,7 +79,7 @@ export default function LocalBVList() {
         </div>
 
         <ul ref={elRef} className='flex flex-wrap -mx-4 my-2'>
-          {bvList?.map((v) => (
+          {pageRes?.list?.map((v) => (
             <li key={v.bvid} style={itemStyle}>
               <BVListItem bv={v} showUpName={isNil(mid)} className='m-4' />
             </li>
@@ -91,7 +91,7 @@ export default function LocalBVList() {
             className='text-center'
             hideOnSinglePage
             current={page}
-            total={bvList?.length}
+            total={pageRes?.total || 0}
             onChange={(page) => setPage(page)}
           />
         </footer>

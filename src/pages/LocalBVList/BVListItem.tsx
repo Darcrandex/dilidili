@@ -56,12 +56,12 @@ export default function BVListItem(props: BVListItemProps) {
           src={info.pic}
           alt=''
           referrerPolicy='no-referrer'
-          className='block w-full h-36 rounded-md object-cover cursor-pointer hover:opacity-80 transition-all'
+          className='block w-full h-36 rounded-md object-cover cursor-pointer hover:opacity-80 hover:shadow-xl transition-all'
           onClick={openVideo}
         />
 
         {localInfo.videoPaths.length > 1 && (
-          <b className='absolute top-1 right-1 text-xs text-white'>{localInfo.videoPaths.length}P</b>
+          <b className='absolute top-1 right-1 !m-0 text-xs text-white'>{localInfo.videoPaths.length}P</b>
         )}
 
         <div className='h-12 leading-6 text-sm overflow-clip'>{info.title}</div>

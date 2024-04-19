@@ -44,9 +44,10 @@ export const fsService = {
       bvs = bvs.filter((b) => b.info?.title.includes(params.keyword!))
     }
 
+    const total = bvs.length
     const limit = params.pageSize || 20
     const offset = (params.page || 1) * limit - limit
 
-    return bvs.slice(offset, offset + limit)
+    return { list: bvs.slice(offset, offset + limit), total }
   },
 }
