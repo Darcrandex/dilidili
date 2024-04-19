@@ -16,7 +16,7 @@ import TaskItem from './TaskItem'
 export default function Tasks() {
   const queryClient = useQueryClient()
   const { data: taskList } = useQuery({
-    // refetchInterval: 2000,
+    refetchInterval: 2000,
     queryKey: ['tasks'],
     queryFn: async () => {
       const res = await taskService.getTasks()
