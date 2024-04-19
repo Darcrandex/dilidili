@@ -7,9 +7,10 @@
 import { fsService } from '@/services/fs'
 import { userService } from '@/services/user'
 import UEmpty from '@/ui/UEmpty'
-import { useQuery } from '@tanstack/react-query'
+import { RedoOutlined } from '@ant-design/icons'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDebounce, useSize } from 'ahooks'
-import { Input, Pagination } from 'antd'
+import { Button, Input, Pagination } from 'antd'
 import Avatar from 'antd/es/avatar/avatar'
 import { isNil, isNotNil } from 'ramda'
 import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
@@ -18,6 +19,8 @@ import BVListItem from './BVListItem'
 
 export default function LocalBVList() {
   const mid = useParams().mid
+  const queryClient = useQueryClient()
+
   const [page, setPage] = useState(1)
   const pageSize = 20
   const [searchText, setSearchText] = useState('')
@@ -75,7 +78,7 @@ export default function LocalBVList() {
           </section>
         )}
 
-        <div className='max-w-sm mx-auto my-10'>
+        <div className='flex max-w-sm mx-auto my-10 space-x-4'>
           <Input.Search
             maxLength={30}
             placeholder='搜索视频'
@@ -84,6 +87,14 @@ export default function LocalBVList() {
             onChange={(e) => setSearchText(e.target.value)}
             allowClear
           />
+
+          <Button
+            type='primary'
+            icon={<RedoOutlined />}
+            onClick={() => queryClient.invalidateQueries({ queryKey: ['bv-list'] })}
+          >
+            刷新
+          </Button>
         </div>
 
         <ul ref={elRef} className='flex flex-wrap -mx-4 my-2'>

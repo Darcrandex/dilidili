@@ -44,6 +44,9 @@ export const fsService = {
       bvs = bvs.filter((b) => b.info?.title.includes(params.keyword!))
     }
 
+    // sort by publish date
+    bvs = bvs.sort((a, b) => (a.info?.pubdate && b.info?.pubdate ? b.info?.pubdate - a.info?.pubdate : 0))
+
     const total = bvs.length
     const limit = params.pageSize || 20
     const offset = (params.page || 1) * limit - limit
