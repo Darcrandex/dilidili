@@ -13,6 +13,9 @@ const Search = lazy(() => import('@/views/Search'))
 const BVDetail = lazy(() => import('@/views/BVDetail'))
 const UPDetail = lazy(() => import('@/views/UPDetail'))
 
+const LocalBVApp = lazy(() => import('@/views/LocalBVApp'))
+const LocalBVList = lazy(() => import('@/views/LocalBVList'))
+
 export const routes: RouteObject[] = [
   {
     path: '/',
@@ -35,6 +38,15 @@ export const routes: RouteObject[] = [
               { index: true, element: <Navigate to='up-list' /> },
               { path: 'up-list', element: <UPList /> },
               { path: 'bv-list', element: <BVList /> },
+            ],
+          },
+
+          {
+            path: 'local-bv-list',
+            element: <LocalBVApp />,
+            children: [
+              { index: true, element: <LocalBVList /> },
+              { path: ':mid', element: <LocalBVList /> },
             ],
           },
         ],

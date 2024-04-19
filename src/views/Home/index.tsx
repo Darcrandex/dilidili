@@ -12,7 +12,8 @@ import { Outlet, useMatch, useNavigate } from 'react-router-dom'
 const navs = [
   { to: 'search', title: '搜索视频' },
   { to: 'tasks', title: '下载任务' },
-  { to: 'local-files', title: '本地文件' },
+  // { to: 'local-files', title: '本地文件' },
+  { to: 'local-bv-list', title: '本地视频' },
 ]
 
 export default function Home() {

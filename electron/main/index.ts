@@ -8,6 +8,7 @@ import { registerDownloadBVHandler } from './handlers/download-bv'
 import { registerFetchHandler } from './handlers/fetch'
 import { registerOpenDirHandler } from './handlers/open-dir'
 import { registerOpenInBrowserHandler } from './handlers/open-in-browser'
+import { registerOpenVideoHandler } from './handlers/open-video'
 import { registerReadDirHandler } from './handlers/read-dir'
 import { registerRemoveDirHandler } from './handlers/remove-dir'
 import { registerSelectDirHandler } from './handlers/select-dir'
@@ -112,6 +113,7 @@ async function createWindow() {
   registerOpenInBrowserHandler()
   registerWindowControlHandler()
   registerRemoveDirHandler()
+  registerOpenVideoHandler()
 }
 
 app.whenReady().then(createWindow)

@@ -1,5 +1,5 @@
 import { EChannel } from '@electron/enums'
-import { isNotNil } from 'ramda'
+import { isNotNil, omit } from 'ramda'
 
 export const fsService = {
   // 获取视频目录树
@@ -18,5 +18,31 @@ export const fsService = {
       ?.filter((b) => isNotNil(b.info))
 
     return bvs
+  },
+
+  // 获取本地 up 主列表
+  getUps: async () => {
+    const dirTree: MainProcess.BVTreeWithInfo[] = await window.ipcRenderer.invoke(EChannel.GetBVInfo)
+    return dirTree.map((v) => omit(['bvs'], v))
+  },
+
+  // 根据 mid 获取 bv 列表
+  getBVListByMid: async (params: { mid?: string; page?: number; pageSize?: number }) => {
+    const dirTree: MainProcess.BVTreeWithInfo[] = await window.ipcRenderer.invoke(EChannel.GetBVInfo)
+    let bvs: MainProcess.BVTreeWithInfo['bvs'] = []
+
+    const hasLocalVideos = (b: MainProcess.BVTreeWithInfo['bvs'][number]) => b.localInfo?.videoPaths?.length > 0
+
+    if (params.mid) {
+      const matchedBVs = dirTree.find((d) => d.mid === params.mid)?.bvs?.filter(hasLocalVideos) || []
+      bvs = matchedBVs
+    } else {
+      bvs = dirTree.flatMap((m) => m.bvs).filter(hasLocalVideos)
+    }
+
+    const limit = params.pageSize || 20
+    const offset = (params.page || 1) * limit - limit
+
+    return bvs.slice(offset, offset + limit)
   },
 }

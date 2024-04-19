@@ -17,6 +17,7 @@ export const userService = {
   // 获取用户信息
   profile: () => http<MainProcess.UserProfileShchema>({ url: 'https://api.bilibili.com/x/web-interface/nav' }),
 
+  // 获取 up 主信息
   getUserByMid: (mid: number) =>
     http<MainProcess.UPCardInfo>({
       url: 'https://api.bilibili.com/x/web-interface/card',

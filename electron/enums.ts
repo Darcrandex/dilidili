@@ -21,6 +21,8 @@ export enum EChannel {
   RemoveDir = 'remove-dir',
 
   OpenInBrowser = 'open-in-browser',
+
+  OpenVideoInSystemPlayer = 'open-video-in-system-player',
 }
 
 export enum WindowControl {
