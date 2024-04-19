@@ -4,13 +4,17 @@
  * @author darcrand
  */
 
+import logoImage from '@/assets/logos/dilidili-logo1@0.5x.png'
 import { mediaService } from '@/services/media'
 import { useSession } from '@/stores/session'
 import { useVideoSearch } from '@/stores/video-search'
+import { cls } from '@/utils/cls'
 import { DownloadOutlined } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
+import { useSize } from 'ahooks'
 import { Button, Input } from 'antd'
 import qs from 'qs'
+import { isNotNil } from 'ramda'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DownloadModal from './DownloadModal'
@@ -38,18 +42,32 @@ export default function SearchVideo() {
     queryFn: () => mediaService.info(bvid),
   })
 
+  // layout
+  const winSize = useSize(() => window.document.body)
+
   return (
     <>
       <div className='max-w-xl mx-auto p-4'>
         <section className='mb-4 space-y-4'>
-          <Input.Search
-            placeholder='输入视频地址以搜索'
-            enterButton
-            defaultValue={text}
-            allowClear
-            autoFocus
-            onSearch={(v) => setState({ text: v })}
-          />
+          <div className='max-w-sm mx-auto'>
+            <img
+              src={logoImage}
+              alt=''
+              className={cls('block w-auto h-20 mx-auto mb-12', isNotNil(videoInfo) && 'hidden')}
+              style={{ transform: `translateY(${0.2 * (winSize?.height || 768)}px)` }}
+            />
+
+            <Input.Search
+              placeholder='输入视频地址以搜索'
+              enterButton
+              defaultValue={text}
+              allowClear
+              autoFocus
+              size='large'
+              onSearch={(v) => setState({ text: v })}
+              style={{ transform: `translateY(${isNotNil(videoInfo) ? 0 : 0.2 * (winSize?.height || 768)}px)` }}
+            />
+          </div>
 
           {!!videoInfo && (
             <>

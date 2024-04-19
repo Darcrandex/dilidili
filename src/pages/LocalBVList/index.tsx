@@ -6,20 +6,28 @@
 
 import { fsService } from '@/services/fs'
 import { userService } from '@/services/user'
+import UEmpty from '@/ui/UEmpty'
 import { useQuery } from '@tanstack/react-query'
 import { useDebounce, useSize } from 'ahooks'
 import { Input, Pagination } from 'antd'
 import Avatar from 'antd/es/avatar/avatar'
 import { isNil, isNotNil } from 'ramda'
-import { CSSProperties, useMemo, useRef, useState } from 'react'
+import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import BVListItem from './BVListItem'
 
 export default function LocalBVList() {
   const mid = useParams().mid
   const [page, setPage] = useState(1)
+  const pageSize = 20
   const [searchText, setSearchText] = useState('')
   const keyword = useDebounce(searchText, { wait: 1000 })
+
+  // reset
+  useEffect(() => {
+    setPage(1)
+    setSearchText('')
+  }, [mid])
 
   const { data: profile } = useQuery({
     enabled: !!mid,
@@ -31,7 +39,7 @@ export default function LocalBVList() {
   const { data: pageRes } = useQuery({
     refetchOnMount: 'always',
     queryKey: ['bv-list', page, mid, keyword],
-    queryFn: () => fsService.getBVListByMid({ mid, page, pageSize: 20, keyword }),
+    queryFn: () => fsService.getBVListByMid({ mid, page, pageSize, keyword }),
   })
 
   // layout
@@ -86,11 +94,14 @@ export default function LocalBVList() {
           ))}
         </ul>
 
+        {pageRes?.list?.length === 0 && <UEmpty>啥也没有...</UEmpty>}
+
         <footer className='my-4'>
           <Pagination
             className='text-center'
             hideOnSinglePage
             current={page}
+            pageSize={pageSize}
             total={pageRes?.total || 0}
             onChange={(page) => setPage(page)}
           />

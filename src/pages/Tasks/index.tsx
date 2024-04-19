@@ -5,8 +5,9 @@
  */
 
 import { taskService } from '@/services/tasks'
+import UEmpty from '@/ui/UEmpty'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Empty } from 'antd'
+import { Button } from 'antd'
 import Modal from 'antd/es/modal/Modal'
 import { reverse } from 'ramda'
 import { useState } from 'react'
@@ -51,7 +52,7 @@ export default function Tasks() {
             ))}
           </ul>
 
-          {taskList?.length === 0 && <Empty description='暂无下载任务' />}
+          {taskList?.length === 0 && <UEmpty>没有任务</UEmpty>}
         </section>
       </div>
 
