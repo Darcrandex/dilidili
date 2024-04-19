@@ -67,7 +67,7 @@ export default function LocalBVList() {
           </section>
         )}
 
-        <div className='w-sm mx-auto my-10'>
+        <div className='max-w-sm mx-auto my-10'>
           <Input.Search
             maxLength={30}
             placeholder='搜索视频'

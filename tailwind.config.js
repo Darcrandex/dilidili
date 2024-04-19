@@ -5,10 +5,6 @@ export default {
     extend: {
       colors: { primary: '#fb7299' },
       width: {
-        128: '32rem',
-        144: '36rem',
-        256: '64rem',
-        512: '128rem',
         sm: '640px',
         md: '768px',
         lg: '1024px',
@@ -16,10 +12,6 @@ export default {
         '2xl': '1536px',
       },
       height: {
-        128: '32rem',
-        144: '36rem',
-        256: '64rem',
-        512: '128rem',
         sm: '640px',
         md: '768px',
         lg: '1024px',
@@ -28,10 +20,6 @@ export default {
       },
 
       maxWidth: {
-        128: '32rem',
-        144: '36rem',
-        256: '64rem',
-        512: '128rem',
         sm: '640px',
         md: '768px',
         lg: '1024px',
@@ -39,10 +27,6 @@ export default {
         '2xl': '1536px',
       },
       maxHeight: {
-        128: '32rem',
-        144: '36rem',
-        256: '64rem',
-        512: '128rem',
         sm: '640px',
         md: '768px',
         lg: '1024px',
