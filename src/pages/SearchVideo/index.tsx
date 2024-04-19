@@ -58,7 +58,7 @@ export default function SearchVideo() {
             />
 
             <Input.Search
-              placeholder='输入视频地址看看吧  ≖‿≖✧'
+              placeholder='输入视频地址试试看吧  ≖‿≖✧'
               enterButton
               defaultValue={text}
               allowClear

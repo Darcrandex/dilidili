@@ -39,7 +39,7 @@ export default function TopHeader(props: TopHeaderProps) {
 
         <div className='top-header--undraggable'>{props.children}</div>
 
-        <div className='top-header--undraggable self-start ml-auto p-2'>
+        <div className='top-header--undraggable self-start ml-auto p-2 space-x-2'>
           <Button
             type='link'
             icon={<LineOutlined />}

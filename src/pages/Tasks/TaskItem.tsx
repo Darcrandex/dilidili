@@ -88,8 +88,20 @@ export default function TaskItem(props: TaskItemProps) {
               label: '打开文件夹',
               onClick: () => onOpenDir(props.task.folderDir),
             },
-            { key: 'reDownload', icon: <DownloadOutlined />, label: '重新下载', onClick: onReDownload },
-            { key: 'remove', icon: <DeleteOutlined />, label: '删除任务', onClick: () => onRemove(props.task.id) },
+            {
+              key: 'reDownload',
+              icon: <DownloadOutlined />,
+              label: '重新下载',
+              disabled: status?.value !== ETaskStatus.Downloading && status?.value !== ETaskStatus.Mixing,
+              onClick: onReDownload,
+            },
+            {
+              key: 'remove',
+              icon: <DeleteOutlined />,
+              disabled: status?.value !== ETaskStatus.Downloading && status?.value !== ETaskStatus.Mixing,
+              label: '删除任务',
+              onClick: () => onRemove(props.task.id),
+            },
           ],
         }}
       >
