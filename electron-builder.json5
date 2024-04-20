@@ -11,10 +11,12 @@
   files: ['dist-electron', 'dist'],
 
   mac: {
+    icon: './build/icon.ico',
     artifactName: '${productName}.${ext}',
     target: ['zip'],
   },
   win: {
+    icon: './build/icon.ico',
     target: [
       {
         target: 'zip',
