@@ -8,19 +8,15 @@
     output: 'release',
   },
 
+  extraResources: 'follow', // 禁用软链接
   files: ['dist-electron', 'dist'],
 
   mac: {
-    artifactName: '${productName}.${ext}',
     target: ['zip'],
+    artifactName: '${productName}.${ext}',
   },
   win: {
-    target: [
-      {
-        target: 'zip',
-        arch: ['x64'],
-      },
-    ],
+    target: ['portable'],
     artifactName: '${productName}.${ext}',
   },
   nsis: {
