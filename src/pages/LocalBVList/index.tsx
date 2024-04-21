@@ -4,22 +4,27 @@
  * @author darcrand
  */
 
+import { ipcActions } from '@/actions'
 import { fsService } from '@/services/fs'
 import { userService } from '@/services/user'
 import UEmpty from '@/ui/UEmpty'
-import { RedoOutlined } from '@ant-design/icons'
+import { DeleteOutlined, FolderOpenOutlined, MoreOutlined, RedoOutlined } from '@ant-design/icons'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDebounce, useSize } from 'ahooks'
-import { Button, Input, Pagination } from 'antd'
+import { Button, Dropdown, Input, Modal, Pagination } from 'antd'
 import Avatar from 'antd/es/avatar/avatar'
 import { isNil, isNotNil } from 'ramda'
 import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import BVListItem from './BVListItem'
 
 export default function LocalBVList() {
   const mid = useParams().mid
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
+
+  const { data: allUps } = useQuery({ queryKey: ['local-files', 'up-list'], queryFn: () => fsService.getUps() })
+  const folderDir = allUps?.find((v) => v.mid === mid)?.dir
 
   const [page, setPage] = useState(1)
   const pageSize = 20
@@ -56,6 +61,15 @@ export default function LocalBVList() {
     return { width: `${Math.round(100 / cols)}%` }
   }, [wrapperSize])
 
+  // remove up folder
+  const [openRemove, setOpenRemove] = useState(false)
+  const onRemoveUpFolder = async () => {
+    await ipcActions.deleteFolder(folderDir || '')
+    queryClient.invalidateQueries({ queryKey: ['local-files'] })
+    setOpenRemove(false)
+    navigate('/home/local-bv', { replace: true })
+  }
+
   return (
     <>
       <div className='max-w-2xl mx-auto p-4'>
@@ -65,9 +79,14 @@ export default function LocalBVList() {
               {profile?.card.name}
             </Avatar>
 
-            <div className='ml-4'>
+            <div className='flex-1 mx-4'>
               <p className='space-x-2'>
-                <span className='font-bold text-xl'>{profile?.card.name}</span>
+                <span
+                  className='font-bold text-xl hover:text-primary transition-colors cursor-pointer'
+                  onClick={() => ipcActions.openInBrowser(`https://space.bilibili.com/${mid}`)}
+                >
+                  {profile?.card.name}
+                </span>
                 <sup className='inline-block px-1 text-xs bg-orange-500 text-white'>
                   lv.{profile?.card?.level_info?.current_level}
                 </sup>
@@ -75,6 +94,24 @@ export default function LocalBVList() {
               <p className='mt-2 text-gray-500 text-sm'>MID:{mid}</p>
               <p className='text-gray-500 text-sm'>{profile.card.sign}</p>
             </div>
+
+            <Dropdown
+              trigger={['click']}
+              menu={{
+                items: [
+                  {
+                    key: 'open',
+                    icon: <FolderOpenOutlined />,
+                    label: '打开文件夹',
+                    onClick: () => ipcActions.openFolder(folderDir || ''),
+                  },
+
+                  { key: 'remove', icon: <DeleteOutlined />, label: '删除文件夹', onClick: () => setOpenRemove(true) },
+                ],
+              }}
+            >
+              <Button shape='circle' type='text' icon={<MoreOutlined />} />
+            </Dropdown>
           </section>
         )}
 
@@ -118,6 +155,11 @@ export default function LocalBVList() {
           />
         </footer>
       </div>
+
+      <Modal title='删除文件夹' open={openRemove} onCancel={() => setOpenRemove(false)} onOk={onRemoveUpFolder}>
+        <p>确定要删除文件夹吗？</p>
+        <p>这个 Up 所有的视频都会被删除哦</p>
+      </Modal>
     </>
   )
 }
