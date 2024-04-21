@@ -20,6 +20,5 @@
   win: {
     target: ['portable'],
     artifactName: '${productName}_${version}.${ext}',
-    sign: false,
   },
 }
