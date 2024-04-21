@@ -28,5 +28,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            ${{ github.workspace }}/release/dilidili.zip
+            ${{ github.workspace }}/release/dilidili.*
           token: ${{ secrets.GH_TOKEN }}

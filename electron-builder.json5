@@ -11,10 +11,17 @@
   extraResources: 'follow', // 禁用软链接
   files: ['dist-electron', 'dist'],
 
+  // mac: {
+  //   target: ['zip'],
+  //   artifactName: '${productName}.${ext}',
+  // },
+
   mac: {
-    target: ['zip'],
+    target: 'dmg',
+    asarUnpack: ['**/*.app'],
     artifactName: '${productName}.${ext}',
   },
+
   win: {
     target: ['portable'],
     artifactName: '${productName}.${ext}',
