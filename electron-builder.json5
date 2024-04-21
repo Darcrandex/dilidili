@@ -11,25 +11,15 @@
   extraResources: 'follow', // 禁用软链接
   files: ['dist-electron', 'dist'],
 
-  // mac: {
-  //   target: ['zip'],
-  //   artifactName: '${productName}.${ext}',
-  // },
-
   mac: {
     target: 'dmg',
     asarUnpack: ['**/*.app'],
-    artifactName: '${productName}.${ext}',
+    artifactName: '${productName}_${version}.${ext}',
   },
 
   win: {
     target: ['portable'],
-    artifactName: '${productName}.${ext}',
-  },
-  nsis: {
-    oneClick: false,
-    perMachine: false,
-    allowToChangeInstallationDirectory: true,
-    deleteAppDataOnUninstall: false,
+    artifactName: '${productName}_${version}.${ext}',
+    sign: false,
   },
 }
