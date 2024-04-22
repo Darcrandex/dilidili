@@ -41,7 +41,11 @@ export const fsService = {
     }
 
     if (params.keyword?.trim()) {
-      bvs = bvs.filter((b) => b.info?.title.includes(params.keyword!))
+      bvs = bvs.filter((b) => {
+        const title = b.info?.title?.toLocaleLowerCase()
+        const keyword = params.keyword!.toLowerCase()
+        return title?.includes(keyword)
+      })
     }
 
     // sort by publish date

@@ -7,6 +7,7 @@
 import { ipcActions } from '@/actions'
 import { mediaService } from '@/services/media'
 import { taskService } from '@/services/tasks'
+import { getSimilarQualityVideo } from '@/utils/getSimilarQualityVideo'
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -40,6 +41,8 @@ export default function TaskItem(props: TaskItemProps) {
     queryKey: ['video', 'playurl', bvid, cid],
     enabled: !!bvid,
     queryFn: () => mediaService.playurl(bvid, cid),
+    gcTime: 3 * 60 * 1000,
+    staleTime: 3 * 60 * 1000,
   })
 
   const status = statusOptions.find((o) => o.value === props.task.status)
@@ -64,7 +67,8 @@ export default function TaskItem(props: TaskItemProps) {
     // 需要重新获取
     const matchedPageInfo = playurlData
     const videos = R.sort((a, b) => b.bandwidth - a.bandwidth, matchedPageInfo?.dash?.video || [])
-    const videoDownloadUrl = videos.find((v) => v.id === props.task.params.quality)?.baseUrl || ''
+    const matchedVideo = getSimilarQualityVideo(props.task.params.quality, videos)
+    const videoDownloadUrl = matchedVideo?.baseUrl || ''
 
     const audios = R.sort((a, b) => b.bandwidth - a.bandwidth, matchedPageInfo?.dash?.audio || [])
     const audioDownloadUrl = R.head(audios)?.baseUrl || ''

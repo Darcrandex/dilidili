@@ -1,7 +1,7 @@
 // 定义 ipc 功能列表，为了规范接口
 // 将所有使用  window.ipcRenderer.invoke 的方法都放在这里
 
-import { EChannel } from '@electron/enums'
+import { EChannel, EStorage } from '@electron/enums'
 
 export const ipcActions = {
   // 选择文件夹
@@ -28,5 +28,23 @@ export const ipcActions = {
   // 使用默认视频播放器打开指定的视频
   openVideo: async (path: string) => {
     await window.ipcRenderer.invoke(EChannel.OpenVideoInSystemPlayer, path)
+  },
+
+  // 订阅任务列表的更新事件
+  subscribeTasksStatus: (listener?: (...args: any[]) => void) => {
+    const callback = (event?: any, storeKey?: string) => {
+      if (storeKey === EStorage.DownloadTasks) {
+        console.log('subscribeTasksStatus')
+
+        listener?.()
+      }
+    }
+
+    window.ipcRenderer.on(EChannel.StoreUpdated, callback)
+
+    // unsubscribe
+    return () => {
+      window.ipcRenderer.off(EChannel.StoreUpdated, callback)
+    }
   },
 }

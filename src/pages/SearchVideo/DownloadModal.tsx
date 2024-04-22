@@ -8,13 +8,13 @@ import { mediaService } from '@/services/media'
 import { taskService } from '@/services/tasks'
 import { useSession } from '@/stores/session'
 import { cls } from '@/utils/cls'
+import { getSimilarQualityVideo } from '@/utils/getSimilarQualityVideo'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useSelections } from 'ahooks'
 import { Button, Checkbox, Col, Modal, Row, Select } from 'antd'
 import * as R from 'ramda'
 import { ReactNode, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getSimilarQualityVideo } from './utils'
 
 export type DownloadModalProps = {
   videoInfo: MainProcess.VideoInfoSchema
@@ -42,6 +42,9 @@ export default function DownloadModal(props: DownloadModalProps) {
       select: (info: MainProcess.PageInfoSchema) => {
         return { page: v.page, info }
       },
+      // 下载地址有效时间 180 秒
+      gcTime: 3 * 60 * 1000,
+      staleTime: 3 * 60 * 1000,
     })),
   })
 

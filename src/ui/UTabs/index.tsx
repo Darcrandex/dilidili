@@ -47,7 +47,7 @@ export default function UTabs(props: UTabsProps) {
           <li
             key={v.key}
             className={cls(
-              'mx-2 py-2 transition-all font-bold',
+              'mx-4 py-2 transition-all font-bold',
               v.key === props.activeKey ? 'text-primary' : 'hover:text-primary/80',
             )}
           >
