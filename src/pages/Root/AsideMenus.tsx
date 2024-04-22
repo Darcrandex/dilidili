@@ -9,9 +9,9 @@ import { HomeOutlined, SettingOutlined, SmileOutlined } from '@ant-design/icons'
 import { NavLink } from 'react-router-dom'
 
 const menus = [
-  { to: 'home', title: '首页', icon: <HomeOutlined /> },
-  { to: 'mine', title: '我的', icon: <SmileOutlined /> },
-  { to: 'settings', title: '设置', icon: <SettingOutlined /> },
+  { to: '/home', title: '首页', icon: <HomeOutlined /> },
+  { to: '/mine', title: '我的', icon: <SmileOutlined /> },
+  { to: '/settings', title: '设置', icon: <SettingOutlined /> },
 ]
 
 export default function AsideMenus() {

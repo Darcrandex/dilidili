@@ -1,6 +1,10 @@
 {
   "name": "dilidili",
   "version": "0.0.6",
+  "author": {
+    "name": "darcrand",
+    "email": "darcrandex@gmail.com"
+  },
   "main": "dist-electron/main/index.js",
   "description": "Electron Vite React boilerplate.",
   "type": "module",

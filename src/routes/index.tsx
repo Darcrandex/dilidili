@@ -10,6 +10,7 @@ const SearchVideo = lazy(() => import('@/pages/SearchVideo'))
 const Tasks = lazy(() => import('@/pages/Tasks'))
 const LocalBVApp = lazy(() => import('@/pages/LocalBVApp'))
 const LocalBVList = lazy(() => import('@/pages/LocalBVList'))
+const NotFound = lazy(() => import('@/pages/404'))
 
 export const routes: RouteObject[] = [
   {
@@ -40,4 +41,6 @@ export const routes: RouteObject[] = [
       { path: 'settings', element: <Settings /> },
     ],
   },
+
+  { path: '*', element: <NotFound /> },
 ]
