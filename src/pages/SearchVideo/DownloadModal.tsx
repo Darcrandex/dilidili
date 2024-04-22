@@ -14,6 +14,7 @@ import { Button, Checkbox, Col, Modal, Row, Select } from 'antd'
 import * as R from 'ramda'
 import { ReactNode, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getSimilarQualityVideo } from './utils'
 
 export type DownloadModalProps = {
   videoInfo: MainProcess.VideoInfoSchema
@@ -99,7 +100,8 @@ export default function DownloadModal(props: DownloadModalProps) {
         // 先根据 bandwidth 降序
         // 保证下载的是高码率的
         const videos = R.sort((a, b) => b.bandwidth - a.bandwidth, matchedPageInfo?.dash?.video || [])
-        const videoDownloadUrl = videos.find((v) => v.id === quality)?.baseUrl || ''
+        const matchedVideo = getSimilarQualityVideo(quality, videos)
+        const videoDownloadUrl = matchedVideo?.baseUrl || ''
 
         const audios = R.sort((a, b) => b.bandwidth - a.bandwidth, matchedPageInfo?.dash?.audio || [])
         const audioDownloadUrl = R.head(audios)?.baseUrl || ''
@@ -108,7 +110,7 @@ export default function DownloadModal(props: DownloadModalProps) {
           ownerId: props.videoInfo.owner.mid.toString(),
           bvid: props.videoInfo.bvid,
           page: p,
-          quality,
+          quality: matchedVideo?.id || quality,
           videoDownloadUrl,
           audioDownloadUrl,
           coverImageUrl: props.videoInfo.pic,

@@ -13,11 +13,12 @@ import {
   DeleteOutlined,
   DownloadOutlined,
   FolderOpenOutlined,
+  MoreOutlined,
   SyncOutlined,
 } from '@ant-design/icons'
 import { ETaskStatus } from '@electron/enums'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Dropdown, Tag } from 'antd'
+import { Button, Dropdown, Tag } from 'antd'
 import dayjs from 'dayjs'
 import * as R from 'ramda'
 import { useMemo } from 'react'
@@ -42,6 +43,7 @@ export default function TaskItem(props: TaskItemProps) {
   })
 
   const status = statusOptions.find((o) => o.value === props.task.status)
+  const isPending = props.task.status === ETaskStatus.Downloading || props.task.status === ETaskStatus.Mixing
 
   const qualityLabel = useMemo(() => {
     if (!Array.isArray(playurlData?.support_formats) || !props.task.params.quality) return null
@@ -78,60 +80,65 @@ export default function TaskItem(props: TaskItemProps) {
 
   return (
     <>
-      <Dropdown
-        trigger={['contextMenu']}
-        menu={{
-          items: [
-            {
-              key: 'openDir',
-              icon: <FolderOpenOutlined />,
-              label: '打开文件夹',
-              onClick: () => onOpenDir(props.task.folderDir),
-            },
-            {
-              key: 'reDownload',
-              icon: <DownloadOutlined />,
-              label: '重新下载',
-              disabled: status?.value !== ETaskStatus.Downloading && status?.value !== ETaskStatus.Mixing,
-              onClick: onReDownload,
-            },
-            {
-              key: 'remove',
-              icon: <DeleteOutlined />,
-              disabled: status?.value !== ETaskStatus.Downloading && status?.value !== ETaskStatus.Mixing,
-              label: '删除任务',
-              onClick: () => onRemove(props.task.id),
-            },
-          ],
-        }}
-      >
-        <div className='group flex space-x-4 rounded-md transition-all hover:bg-slate-50'>
-          <img
-            src={props.task.params.videoInfo.pic}
-            alt=''
-            referrerPolicy='no-referrer'
-            className='block w-40 h-24 rounded-md object-cover'
-          />
+      <div className='group flex space-x-4 rounded-md transition-all hover:bg-slate-50'>
+        <img
+          src={props.task.params.videoInfo.pic}
+          alt=''
+          referrerPolicy='no-referrer'
+          className='block w-40 h-24 rounded-md object-cover'
+        />
 
-          <article className='flex-1 flex flex-col py-2'>
-            <p className='leading-6 h-12 overflow-hidden'>{props.task.params.videoInfo.title}</p>
+        <article className='flex-1 flex flex-col py-2'>
+          <p className='leading-6 h-12 overflow-hidden'>{props.task.params.videoInfo.title}</p>
 
-            <p className='flex flex-wrap text-sm'>
-              <Tag bordered={false}>UP {props.task.params.videoInfo.owner.name}</Tag>
+          <p className='flex flex-wrap text-sm'>
+            <Tag bordered={false}>{props.task.params.videoInfo.owner.name}</Tag>
 
-              <Tag bordered={false}>
-                P{props.task.params.page} {qualityLabel}
-              </Tag>
+            <Tag bordered={false}>P{props.task.params.page}</Tag>
 
-              <Tag bordered={false}>{dayjs(props.task.createdAt).format('YYYY-MM-DD HH:mm:ss')}</Tag>
+            <Tag bordered={false}>{qualityLabel}</Tag>
 
-              <Tag bordered={false} color={status?.color} icon={status?.icon}>
-                {status?.label}
-              </Tag>
-            </p>
-          </article>
+            <Tag bordered={false}>{dayjs(props.task.createdAt).format('YYYY-MM-DD HH:mm:ss')}</Tag>
+
+            <Tag bordered={false} color={status?.color} icon={status?.icon}>
+              {status?.label}
+            </Tag>
+          </p>
+        </article>
+
+        <div className='px-4 self-center transition-all opacity-0 group-hover:opacity-100'>
+          <Dropdown
+            trigger={['click']}
+            placement='bottomRight'
+            menu={{
+              items: [
+                {
+                  key: 'openDir',
+                  icon: <FolderOpenOutlined />,
+                  label: '打开文件夹',
+                  onClick: () => onOpenDir(props.task.folderDir),
+                },
+                {
+                  key: 'reDownload',
+                  icon: <DownloadOutlined />,
+                  label: '重新下载',
+                  disabled: isPending,
+                  onClick: onReDownload,
+                },
+                {
+                  key: 'remove',
+                  icon: <DeleteOutlined />,
+                  disabled: isPending,
+                  label: '删除任务',
+                  onClick: () => onRemove(props.task.id),
+                },
+              ],
+            }}
+          >
+            <Button shape='circle' type='text' icon={<MoreOutlined />} />
+          </Dropdown>
         </div>
-      </Dropdown>
+      </div>
     </>
   )
 }
