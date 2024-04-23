@@ -16,6 +16,9 @@ export function registerDebugHandler() {
 
 function debugFfmpeg() {
   return new Promise<string>((resolve) => {
+    const appPath = app.getAppPath()
+    const my_ffmpegPath = path.join(appPath, 'resources', 'test-file.json')
+
     if (ffmpegPath) {
       // 打包之后路径需要调整
       // 打包时，ffmpeg 下载的是当前打包的机器对应的二进制文件
@@ -27,9 +30,9 @@ function debugFfmpeg() {
       command.setFfmpegPath(binaryPath)
       command.getAvailableEncoders((err, encoders) => {
         if (err || !encoders) {
-          resolve(`ffmpeg 路径：${binaryPath} 匹配错误`)
+          resolve(`ffmpeg 路径匹配错误：${binaryPath}`)
         } else {
-          resolve(binaryPath)
+          resolve(JSON.stringify({ binaryPath, my_ffmpegPath }))
         }
       })
     } else {
