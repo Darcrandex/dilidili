@@ -21,12 +21,4 @@
     target: ['portable'],
     artifactName: '${productName}_${version}.${ext}',
   },
-
-  publish: {
-    provider: 'github',
-    owner: 'darcrand',
-    repo: 'dilidili',
-    releaseType: 'draft',
-    vPrefixedTagName: false,
-  },
 }
