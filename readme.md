@@ -7,7 +7,7 @@
 ## 预览
 
 <p align="center">
-  <img src="./build/screenshort.png"   />
+  <img src="./build/screenshort.png" width="320" />
 </p>
 
 > 参考
