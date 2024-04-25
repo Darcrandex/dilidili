@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="build/icon.png" alt="" width="120"/>
+  <img src="./build/icon.png" alt="" width="120"/>
 </p>
 
 ## 哔哩哔哩 BV 视频下载器
@@ -7,7 +7,7 @@
 ## 预览
 
 <p align="center">
-  <img src="build/screenshort.png"   />
+  <img src="./build/screenshort.png"   />
 </p>
 
 > 参考
