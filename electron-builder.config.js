@@ -19,9 +19,5 @@ module.exports = {
 
   publish: {
     provider: 'github',
-    owner: 'Darcrandex',
-    repo: 'dilidili',
-    releaseType: 'draft',
-    vPrefixedTagName: true,
   },
 }

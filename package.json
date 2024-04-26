@@ -13,7 +13,7 @@
     "build": "tsc && vite build && electron-builder",
     "preview": "vite preview",
     "format": "prettier --write . --ignore-path .gitignore",
-    "publish": "electron-builder -p never"
+    "release": "tsc && vite build && electron-builder --publish always"
   },
   "dependencies": {
     "@ant-design/cssinjs": "^1.19.1",
