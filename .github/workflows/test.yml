@@ -1,37 +1,29 @@
-name: Build Test 01
+name: Test Publish
 
 on: workflow_dispatch
 
 jobs:
-  build:
+  get_github_token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get token
+        run: |
+          echo ${{ secrets.GH_TOKEN }}
+
+  publish_on_all_os:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
         with:
           node-version: 20
-
-      - name: Install dependencies
+      - name: install dependencies
         run: npm install
-
-      - name: Build project
-        run: npm run build
-
-      - name: Get latest tag
-        id: get_latest_tag
-        run: echo "::set-output name=tag::$(git describe --tags --abbrev=0)"
-
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.get_latest_tag.outputs.tag }}
-          files: |
-            ${{ github.workspace }}/release/dilidili.*
-          token: ${{ secrets.GH_TOKEN }}
+      - name: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npm run publish
