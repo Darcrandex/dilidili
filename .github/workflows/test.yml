@@ -24,10 +24,14 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Get latest tag
+        id: get_latest_tag
+        run: echo "::set-output name=tag::$(git describe --tags --abbrev=0)"
+
       - name: Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
         with:
+          tag_name: ${{ steps.get_latest_tag.outputs.tag }}
           files: |
             ${{ github.workspace }}/release/dilidili.*
           token: ${{ secrets.GH_TOKEN }}
