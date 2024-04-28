@@ -1,7 +1,0 @@
-.top-header--draggable {
-  -webkit-app-region: drag;
-}
-
-.top-header--undraggable {
-  -webkit-app-region: none;
-}
