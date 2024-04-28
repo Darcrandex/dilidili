@@ -1,35 +1,40 @@
-import Versions from './components/Versions'
-import electronLogo from './assets/electron.svg'
+/**
+ * @name App
+ * @description
+ * @author darcrand
+ */
 
-function App(): JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+import { EChannel } from '@main/enums'
+import { useQueryClient } from '@tanstack/react-query'
+import { Suspense, useEffect } from 'react'
+import { RouterProvider, createHashRouter } from 'react-router-dom'
+import { ipcActions } from './actions'
+import { routes } from './routes'
+
+const router = createHashRouter(routes)
+
+export default function App() {
+  useEffect(() => {
+    window.electron.ipcRenderer.invoke(EChannel.Debug).then((res: any) => {
+      console.log('debug', res)
+    })
+  }, [])
+
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    // 监听任务列表更新
+    return ipcActions.subscribeTasksStatus(() => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
+      queryClient.invalidateQueries({ queryKey: ['local-files'] })
+    })
+  }, [queryClient])
 
   return (
     <>
-      <img alt='logo' className='logo' src={electronLogo} />
-      <div className='creator'>Powered by electron-vite</div>
-      <div className='text'>
-        Build an Electron app with <span className='react'>React</span>
-        &nbsp;and <span className='ts'>TypeScript</span>
-      </div>
-      <p className='tip'>
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-      <div className='actions'>
-        <div className='action'>
-          <a href='https://electron-vite.org/' target='_blank' rel='noreferrer'>
-            Documentation
-          </a>
-        </div>
-        <div className='action'>
-          <a target='_blank' rel='noreferrer' onClick={ipcHandle}>
-            Send IPC
-          </a>
-        </div>
-      </div>
-      <Versions></Versions>
+      <Suspense fallback={null}>
+        <RouterProvider router={router} />
+      </Suspense>
     </>
   )
 }
-
-export default App

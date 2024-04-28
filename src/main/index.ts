@@ -1,7 +1,19 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { electronApp, is, optimizer } from '@electron-toolkit/utils'
+import { BrowserWindow, app, ipcMain, shell } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+
+import { registerBvInfoHandler } from './handlers/bv-info'
+import { registerDebugHandler } from './handlers/debug'
+import { registerDownloadBVHandler } from './handlers/download-bv'
+import { registerFetchHandler } from './handlers/fetch'
+import { registerOpenDirHandler } from './handlers/open-dir'
+import { registerOpenInBrowserHandler } from './handlers/open-in-browser'
+import { registerOpenVideoHandler } from './handlers/open-video'
+import { registerReadDirHandler } from './handlers/read-dir'
+import { registerRemoveDirHandler } from './handlers/remove-dir'
+import { registerSelectDirHandler } from './handlers/select-dir'
+import { registerStorageHandler } from './handlers/storage'
+import { registerWindowControlHandler } from './handlers/win-ctl'
 
 function createWindow(): void {
   // Create the browser window.
@@ -9,8 +21,8 @@ function createWindow(): void {
     width: 900,
     height: 670,
     show: false,
+    frame: false, // 直接隐藏顶部标题栏
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
@@ -33,6 +45,19 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  registerDebugHandler()
+  registerFetchHandler()
+  registerSelectDirHandler()
+  registerStorageHandler()
+  registerDownloadBVHandler()
+  registerReadDirHandler()
+  registerBvInfoHandler()
+  registerOpenDirHandler()
+  registerOpenInBrowserHandler()
+  registerWindowControlHandler()
+  registerRemoveDirHandler()
+  registerOpenVideoHandler()
 }
 
 // This method will be called when Electron has finished
