@@ -14,9 +14,6 @@ importers:
       '@electron-toolkit/preload':
         specifier: ^3.0.1
         version: 3.0.1(electron@30.0.1)
-      '@electron-toolkit/utils':
-        specifier: ^3.0.0
-        version: 3.0.0(electron@30.0.1)
       '@tanstack/react-query':
         specifier: ^5.32.0
         version: 5.32.0(react@18.3.1)
@@ -75,6 +72,9 @@ importers:
       '@electron-toolkit/tsconfig':
         specifier: ^1.0.1
         version: 1.0.1(@types/node@20.12.7)
+      '@electron-toolkit/utils':
+        specifier: ^3.0.0
+        version: 3.0.0(electron@30.0.1)
       '@types/node':
         specifier: ^20.12.7
         version: 20.12.7

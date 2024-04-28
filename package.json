@@ -24,7 +24,6 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.6",
     "@electron-toolkit/preload": "^3.0.1",
-    "@electron-toolkit/utils": "^3.0.0",
     "@tanstack/react-query": "^5.32.0",
     "ahooks": "^3.7.11",
     "antd": "^5.16.4",
@@ -46,6 +45,7 @@
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
+    "@electron-toolkit/utils": "^3.0.0",
     "@types/node": "^20.12.7",
     "@types/qrcode": "^1.5.5",
     "@types/qs": "^6.9.15",
