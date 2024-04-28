@@ -1,16 +1,34 @@
-<p align="center">
-  <img src="./build/icon.png" alt="" width="120"/>
-</p>
+# dilidili
 
-## 哔哩哔哩 BV 视频下载器
+An Electron application with React and TypeScript
 
-## 预览
+## Recommended IDE Setup
 
-<p align="center">
-  <img src="./build/screenshort.png" width="320" />
-</p>
+- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-> 参考
+## Project Setup
 
-- [bilibili api](https://github.com/SocialSisterYi/bilibili-API-collect)
-- [electron vite](https://electron-vite.github.io/)
+### Install
+
+```bash
+$ pnpm install
+```
+
+### Development
+
+```bash
+$ pnpm dev
+```
+
+### Build
+
+```bash
+# For windows
+$ pnpm build:win
+
+# For macOS
+$ pnpm build:mac
+
+# For Linux
+$ pnpm build:linux
+```
