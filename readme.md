@@ -1,34 +1,31 @@
-# dilidili
+<p align="center">
+  <img alt="dilidili" src="resources/icon.png" width="100" />
+</p>
 
-An Electron application with React and TypeScript
+<h1 align="center">bilibli + download = dilidili</h1>
 
-## Recommended IDE Setup
+> 一个下载哔哩哔哩 BV 视频的工具
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+> 参考
+>
+> [electron-vite](https://electron-vite.org/)
 
-## Project Setup
-
-### Install
-
-```bash
-$ pnpm install
-```
-
-### Development
+## 本地打包
 
 ```bash
-$ pnpm dev
+pnpm install
+pnpm run build:unpack
 ```
 
-### Build
+从 dist 文件夹中找到解压的免安装应用程序
 
-```bash
-# For windows
-$ pnpm build:win
+## 从 release 下载
 
-# For macOS
-$ pnpm build:mac
+[下载地址](https://github.com/Darcrandex/dilidili/releases)
 
-# For Linux
-$ pnpm build:linux
-```
+> 安装时提示签名错误问题
+
+由于目前做签名处理，导致安装时会提示不受信任
+
+- Windows：点击 仍信任
+- MacOS：打开终端运行 `sudo xattr -r -d com.apple.quarantine /Applications/dilidili.app`
