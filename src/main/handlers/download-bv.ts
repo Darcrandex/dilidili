@@ -44,7 +44,7 @@ export function registerDownloadBVHandler(): void {
 
     try {
       // 服务端有请求频次限制
-      await stepDelay()
+      await stepDelay(1000)
 
       await downloadFile(params.videoDownloadUrl, videoTemp)
       await stepDelay()
@@ -171,4 +171,5 @@ const taskModel = {
   }
 }
 
-const stepDelay = async (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 100 + Math.random() * 500))
+const stepDelay = async (delay: number = 200): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, delay + Math.random() * 500))

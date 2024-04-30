@@ -146,6 +146,7 @@ export default function LocalBVList() {
           <Pagination
             className='text-center'
             hideOnSinglePage
+            showSizeChanger={false}
             current={page}
             pageSize={pageSize}
             total={pageRes?.total || 0}
