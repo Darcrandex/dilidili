@@ -10,7 +10,8 @@ import { taskService } from '@renderer/services/tasks'
 import { useSession } from '@renderer/stores/session'
 import { cls } from '@renderer/utils/cls'
 import { getSimilarQualityVideo } from '@renderer/utils/getSimilarQualityVideo'
-import { useQueries, useQuery } from '@tanstack/react-query'
+import { taskOneByOne } from '@renderer/utils/task-one-by-one'
+import { useMutation, useQueries, useQuery } from '@tanstack/react-query'
 import { useSelections } from 'ahooks'
 import { Button, Checkbox, Col, Modal, Row, Select } from 'antd'
 import * as R from 'ramda'
@@ -92,49 +93,54 @@ export default function DownloadModal(props: DownloadModalProps) {
     setOpen(false)
   }
 
-  const onOk = async () => {
-    if (!quality || selectedPages.length === 0) return
+  const { mutateAsync: onOk, isPending } = useMutation({
+    mutationFn: async () => {
+      if (!quality || selectedPages.length === 0) return
 
-    const taskParamsArr = selectedPages
-      .map((p) => {
-        // 根据分p序号找到对应的视频信息
-        const matchedPageInfo = pageInfoResArr.find((res) => res?.data?.page === p)?.data?.info
+      const taskParamsArr = selectedPages
+        .map((p) => {
+          // 根据分p序号找到对应的视频信息
+          const matchedPageInfo = pageInfoResArr.find((res) => res?.data?.page === p)?.data?.info
 
-        // id 相同时，bandwidth 不同
-        // 先根据 bandwidth 降序
-        // 保证下载的是高码率的
-        const videos = R.sort((a, b) => b.bandwidth - a.bandwidth, matchedPageInfo?.dash?.video || [])
-        const matchedVideo = getSimilarQualityVideo(quality, videos)
-        const videoDownloadUrl = matchedVideo?.baseUrl || ''
+          // id 相同时，bandwidth 不同
+          // 先根据 bandwidth 降序
+          // 保证下载的是高码率的
+          const videos = R.sort((a, b) => b.bandwidth - a.bandwidth, matchedPageInfo?.dash?.video || [])
+          const matchedVideo = getSimilarQualityVideo(quality, videos)
+          const videoDownloadUrl = matchedVideo?.baseUrl || ''
 
-        const audios = R.sort((a, b) => b.bandwidth - a.bandwidth, matchedPageInfo?.dash?.audio || [])
-        const audioDownloadUrl = R.head(audios)?.baseUrl || ''
+          const audios = R.sort((a, b) => b.bandwidth - a.bandwidth, matchedPageInfo?.dash?.audio || [])
+          const audioDownloadUrl = R.head(audios)?.baseUrl || ''
 
-        const params: MainProcess.DownloadBVParams = {
-          ownerId: props.videoInfo.owner.mid.toString(),
-          bvid: props.videoInfo.bvid,
-          page: p,
-          quality: matchedVideo?.id || quality,
-          videoDownloadUrl,
-          audioDownloadUrl,
-          coverImageUrl: props.videoInfo.pic,
-          videoInfo: props.videoInfo
+          const params: MainProcess.DownloadBVParams = {
+            ownerId: props.videoInfo.owner.mid.toString(),
+            bvid: props.videoInfo.bvid,
+            page: p,
+            quality: matchedVideo?.id || quality,
+            videoDownloadUrl,
+            audioDownloadUrl,
+            coverImageUrl: props.videoInfo.pic,
+            videoInfo: props.videoInfo
+          }
+
+          return params
+        })
+        .filter((v) => Boolean(v.videoDownloadUrl && v.audioDownloadUrl))
+
+      const tasks = taskParamsArr.map((p, i, arr) => {
+        return async () => {
+          taskService.createTask(p)
+          // 多任务添加延迟
+          await sleep(i === arr.length - 1 ? 0 : 500)
         }
-
-        return params
       })
-      .filter((v) => Boolean(v.videoDownloadUrl && v.audioDownloadUrl))
 
-    const tasks = taskParamsArr.map(async (p) => {
-      taskService.createTask(p)
-      await sleep(1000)
-    })
+      await taskOneByOne(tasks)
 
-    Promise.all(tasks)
-
-    onCancel()
-    navigate('/home/tasks', { replace: true })
-  }
+      onCancel()
+      navigate('/home/tasks', { replace: true })
+    }
+  })
 
   return (
     <>
@@ -184,7 +190,13 @@ export default function DownloadModal(props: DownloadModalProps) {
               </Button>
             </Col>
             <Col span={12}>
-              <Button block type='primary' disabled={!quality || !selectedPages.length} onClick={onOk}>
+              <Button
+                block
+                type='primary'
+                disabled={!quality || !selectedPages.length}
+                loading={isPending}
+                onClick={() => onOk()}
+              >
                 开始下载({selectedPages.length})
               </Button>
             </Col>

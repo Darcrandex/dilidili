@@ -11,7 +11,7 @@ import { cls } from '@renderer/utils/cls'
 import { useQueryClient } from '@tanstack/react-query'
 import { Button, Dropdown } from 'antd'
 import dayjs from 'dayjs'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 export type BVListItemProps = {
   bv: MainProcess.BVTreeWithInfo['bvs'][number]
@@ -47,6 +47,10 @@ export default function BVListItem(props: BVListItemProps) {
     const filePath = `${props.bv.dir}/${localInfo?.videoPaths[0]}`
     await ipcActions.openVideo(filePath)
   }
+
+  useEffect(() => {
+    console.log('localInfo', info)
+  }, [info])
 
   if (!info) return null
 
