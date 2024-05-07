@@ -9,6 +9,8 @@
 > 参考
 >
 > [electron-vite](https://electron-vite.org/)
+>
+> [bilibili-API-collect](https://github.com/SocialSisterYi/bilibili-API-collect)
 
 ## 本地打包
 

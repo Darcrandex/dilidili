@@ -1,5 +1,7 @@
 declare namespace MainProcess {
   interface DownloadBVParams {
+    id?: string // 任务 id
+
     videoDownloadUrl: string // 视频下载地址
     audioDownloadUrl: string // 音频下载地址
     coverImageUrl: string // 封面图片地址

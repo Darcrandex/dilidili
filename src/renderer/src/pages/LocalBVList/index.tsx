@@ -11,7 +11,7 @@ import { userService } from '@renderer/services/user'
 import UEmpty from '@renderer/ui/UEmpty'
 import UImage from '@renderer/ui/UImage'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useDebounce, useSize } from 'ahooks'
+import { useSize } from 'ahooks'
 import { Button, Dropdown, Input, Modal, Pagination } from 'antd'
 import { isNil, isNotNil } from 'ramda'
 import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
@@ -29,7 +29,7 @@ export default function LocalBVList() {
   const [page, setPage] = useState(1)
   const pageSize = 20
   const [searchText, setSearchText] = useState('')
-  const keyword = useDebounce(searchText, { wait: 1000 })
+  const [keyword, setKeyword] = useState('')
 
   // reset
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function LocalBVList() {
     queryFn: () => userService.getUserByMid(Number.parseInt(mid || ''))
   })
 
-  const { data: pageRes } = useQuery({
+  const { data: pageRes, isPending } = useQuery({
     refetchOnMount: 'always',
     queryKey: ['bv-list', page, mid, keyword],
     queryFn: () => fsService.getBVListByMid({ mid, page, pageSize, keyword })
@@ -120,6 +120,10 @@ export default function LocalBVList() {
             enterButton
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
+            onSearch={() => {
+              setPage(1)
+              setKeyword(searchText)
+            }}
             allowClear
           />
 
@@ -140,6 +144,7 @@ export default function LocalBVList() {
           ))}
         </ul>
 
+        {isPending && <p className='my-10 text-center text-slate-500'>加载中...</p>}
         {pageRes?.list?.length === 0 && <UEmpty>啥也没有...</UEmpty>}
 
         <footer className='my-4'>

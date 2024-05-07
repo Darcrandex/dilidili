@@ -4,6 +4,7 @@
  * @author darcrand
  */
 
+import { sleep } from '@main/utils/common'
 import { mediaService } from '@renderer/services/media'
 import { taskService } from '@renderer/services/tasks'
 import { useSession } from '@renderer/stores/session'
@@ -124,7 +125,11 @@ export default function DownloadModal(props: DownloadModalProps) {
       })
       .filter((v) => Boolean(v.videoDownloadUrl && v.audioDownloadUrl))
 
-    const tasks = taskParamsArr.map(taskService.createTask)
+    const tasks = taskParamsArr.map(async (p) => {
+      taskService.createTask(p)
+      await sleep(1000)
+    })
+
     Promise.all(tasks)
 
     onCancel()

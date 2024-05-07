@@ -75,6 +75,7 @@ export default function TaskItem(props: TaskItemProps) {
 
     const params: MainProcess.DownloadBVParams = {
       ...props.task.params,
+      id: props.task.id,
       videoDownloadUrl,
       audioDownloadUrl
     }

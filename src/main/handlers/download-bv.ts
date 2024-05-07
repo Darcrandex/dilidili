@@ -23,7 +23,7 @@ export function registerDownloadBVHandler(): void {
     // 创建文件夹
     mkdirSync(folderDir, { recursive: true })
 
-    const id = uuid()
+    const id = params.id || uuid()
     // 下载的临时文件
     const videoTemp = path.resolve(folderDir, `${id}_video.m4s`)
     const audioTemp = path.resolve(folderDir, `${id}_audio.m4s`)
@@ -33,19 +33,22 @@ export function registerDownloadBVHandler(): void {
     const outputPath = path.resolve(folderDir, `${outputFileName}.mp4`)
 
     // 任务开始
-    const newTask: MainProcess.DownloadTask = {
+    const taskItem: MainProcess.DownloadTask = {
       id,
       createdAt: Date.now(),
       status: ETaskStatus.Downloading,
       params,
       folderDir
     }
-    taskModel.create(newTask)
+
+    if (params.id) {
+      // 重新下载
+      taskModel.update(params.id, { ...taskItem, status: ETaskStatus.Downloading })
+    } else {
+      taskModel.create(taskItem)
+    }
 
     try {
-      // 服务端有请求频次限制
-      await stepDelay(1000)
-
       await downloadFile(params.videoDownloadUrl, videoTemp)
       await stepDelay()
       await downloadFile(params.audioDownloadUrl, audioTemp)
@@ -53,23 +56,23 @@ export function registerDownloadBVHandler(): void {
       await downloadFile(params.coverImageUrl, coverImagePath)
       await stepDelay()
       await saveToJSONFile(videoInfoPath, params.videoInfo)
-      taskModel.update(newTask.id, { status: ETaskStatus.Mixing })
+      taskModel.update(taskItem.id, { status: ETaskStatus.Mixing })
 
       // 音视频混流
       await mixing(videoTemp, audioTemp, outputPath)
 
       // 任务完成
-      taskModel.update(newTask.id, { status: ETaskStatus.Finished })
+      taskModel.update(taskItem.id, { status: ETaskStatus.Finished })
     } catch (error) {
-      console.error('混流失败\n', { videoTemp, audioTemp, outputPath }, error)
+      console.error('任务失败\n', { videoTemp, audioTemp, outputPath }, error)
 
       // 任务失败
-      taskModel.update(newTask.id, { status: ETaskStatus.Failed })
+      taskModel.update(taskItem.id, { status: ETaskStatus.Failed })
     } finally {
       // 删除临时文件
       await stepDelay()
-      await promises.unlink(videoTemp)
-      await promises.unlink(audioTemp)
+      promises.unlink(videoTemp)
+      promises.unlink(audioTemp)
     }
   })
 }

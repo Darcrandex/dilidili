@@ -46,8 +46,6 @@ export default function SearchVideo() {
   // layout
   const winSize = useSize(() => window.document.body)
 
-  console.log('videoInfo', videoInfo)
-
   return (
     <>
       <div className='max-w-xl mx-auto p-4'>
