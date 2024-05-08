@@ -25,9 +25,13 @@ pnpm run build:unpack
 
 [下载地址](https://github.com/Darcrandex/dilidili/releases)
 
-> 安装时提示签名错误问题
+## 安装（或使用）过程中提示签名错误
 
-由于目前做签名处理，导致安装时会提示不受信任
+由于该项目没有进行代码签名，导致使用时提示错误
 
-- Windows：点击 仍信任
-- MacOS：打开终端运行 `sudo xattr -r -d com.apple.quarantine /Applications/dilidili.app`
+- Windows 平台在安装过程中会提示“不受信任”，解决方法是依次单击：
+  “更多”，“仍要信任”
+- macos 平台安装完成后，使用终端执行以下代码，再重新打开应用即可
+  ```bash
+  sudo xattr -r -d com.apple.quarantine /Applications/dilidili.app
+  ```
