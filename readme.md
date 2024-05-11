@@ -30,7 +30,7 @@ pnpm run build:unpack
 由于该项目没有进行代码签名，导致使用时提示错误
 
 - Windows 平台在安装过程中会提示“不受信任”，解决方法是依次单击：
-  “更多”，“仍要信任”
+  “更多信息”，“仍要运行”
 - macos 平台安装完成后，使用终端执行以下代码，再重新打开应用即可
   ```bash
   sudo xattr -r -d com.apple.quarantine /Applications/dilidili.app
