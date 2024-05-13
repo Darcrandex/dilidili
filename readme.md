@@ -11,6 +11,8 @@
 > [electron-vite](https://electron-vite.org/)
 >
 > [bilibili-API-collect](https://github.com/SocialSisterYi/bilibili-API-collect)
+>
+> [BilibiliVideoDownload](https://github.com/BilibiliVideoDownload/BilibiliVideoDownload)
 
 ## 本地打包
 
