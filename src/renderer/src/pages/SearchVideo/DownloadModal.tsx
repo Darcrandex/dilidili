@@ -18,6 +18,8 @@ import * as R from 'ramda'
 import { ReactNode, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+const MAX_TASK_COUNT = 100
+
 export type DownloadModalProps = {
   videoInfo: MainProcess.VideoInfoSchema
   defaultPage?: number
@@ -27,6 +29,12 @@ export type DownloadModalProps = {
 export default function DownloadModal(props: DownloadModalProps) {
   const [session] = useSession()
   const navigate = useNavigate()
+  const [modal, contextHolder] = Modal.useModal()
+
+  const { data: taskList } = useQuery({
+    queryKey: ['tasks'],
+    queryFn: () => taskService.getTasks()
+  })
 
   // 视频第一个分p
   const { data: playurlData } = useQuery({
@@ -97,6 +105,16 @@ export default function DownloadModal(props: DownloadModalProps) {
     mutationFn: async () => {
       if (!quality || selectedPages.length === 0) return
 
+      // 检查任务是否达到上限
+      const nextTaskCount = selectedPages.length + (taskList?.length || 0)
+      if (nextTaskCount >= MAX_TASK_COUNT) {
+        modal.warning({
+          title: '提示',
+          content: `(〜￣△￣)〜 任务数量超过 ${MAX_TASK_COUNT} 了，先清空一下吧`
+        })
+        return
+      }
+
       const taskParamsArr = selectedPages
         .map((p) => {
           // 根据分p序号找到对应的视频信息
@@ -145,6 +163,7 @@ export default function DownloadModal(props: DownloadModalProps) {
   return (
     <>
       {typeof props.trigger === 'function' && props.trigger(beforeOpen)}
+      {contextHolder}
 
       <Modal width={420} open={open} onCancel={onCancel} footer={null}>
         <section className='space-y-4'>

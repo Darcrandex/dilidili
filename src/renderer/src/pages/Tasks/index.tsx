@@ -6,6 +6,7 @@
 
 import { taskService } from '@renderer/services/tasks'
 import UEmpty from '@renderer/ui/UEmpty'
+import UScrollView from '@renderer/ui/UScrollView'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button } from 'antd'
 import Modal from 'antd/es/modal/Modal'
@@ -34,26 +35,28 @@ export default function Tasks() {
 
   return (
     <>
-      <div className='max-w-xl mx-auto p-4'>
-        <section className='space-y-4'>
-          <div className='space-x-4'>
-            <Button disabled={taskList?.length === 0} onClick={() => setOpen(true)}>
-              清空下载任务
-            </Button>
-            <Button onClick={() => queryClient.invalidateQueries({ queryKey: ['tasks'] })}>刷新</Button>
-          </div>
+      <UScrollView className='h-full'>
+        <div className='max-w-xl mx-auto p-4'>
+          <section className='space-y-4'>
+            <div className='space-x-4'>
+              <Button disabled={taskList?.length === 0} onClick={() => setOpen(true)}>
+                清空下载任务
+              </Button>
+              <Button onClick={() => queryClient.invalidateQueries({ queryKey: ['tasks'] })}>刷新</Button>
+            </div>
 
-          <ul className='space-y-8'>
-            {taskList?.map((v) => (
-              <li key={v.id}>
-                <TaskItem task={v} />
-              </li>
-            ))}
-          </ul>
+            <ul className='space-y-8'>
+              {taskList?.map((v) => (
+                <li key={v.id}>
+                  <TaskItem task={v} />
+                </li>
+              ))}
+            </ul>
 
-          {taskList?.length === 0 && <UEmpty>没有任务</UEmpty>}
-        </section>
-      </div>
+            {taskList?.length === 0 && <UEmpty>没有任务</UEmpty>}
+          </section>
+        </div>
+      </UScrollView>
 
       <Modal title='提示' open={open} onOk={onRemoveAll} onCancel={() => setOpen(false)}>
         <p>确定要清空下载任务吗?</p>

@@ -11,6 +11,7 @@ import { ScrollbarOptions } from 'smooth-scrollbar/interfaces'
 
 export type UScrollViewProps = PropsWithChildren<{
   className?: string
+  style?: React.CSSProperties
   options?: ScrollbarOptions
 }>
 
@@ -30,7 +31,7 @@ export default forwardRef<Scrollbar, UScrollViewProps>(function UScrollView(prop
 
   return (
     <>
-      <section ref={elRef} className={cls(props.className)}>
+      <section ref={elRef} className={cls(props.className)} style={props.style}>
         <div>{props.children}</div>
       </section>
     </>

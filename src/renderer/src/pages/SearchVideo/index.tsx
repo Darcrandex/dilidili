@@ -9,6 +9,7 @@ import logoImage from '@renderer/assets/logos/dilidili-logo1@0.5x.png'
 import { mediaService } from '@renderer/services/media'
 import { useSession } from '@renderer/stores/session'
 import { useVideoSearch } from '@renderer/stores/video-search'
+import UEmpty from '@renderer/ui/UEmpty'
 import UImage from '@renderer/ui/UImage'
 import { cls } from '@renderer/utils/cls'
 import { useQuery } from '@tanstack/react-query'
@@ -28,8 +29,10 @@ export default function SearchVideo() {
   const bvid = useMemo(() => {
     const regex = /\/video\/(BV[0-9a-zA-Z]+)/
     const match = text.match(regex)
-    return match?.[1] || ''
+    return match?.[1]
   }, [text])
+
+  const invalidBVID = !!text.trim() && !bvid
 
   const p = useMemo(() => {
     const query = text?.split('?')?.[1]
@@ -40,7 +43,7 @@ export default function SearchVideo() {
   const { data: videoInfo } = useQuery({
     queryKey: ['video', 'info', bvid, text],
     enabled: !!bvid,
-    queryFn: () => mediaService.info(bvid)
+    queryFn: () => mediaService.info(bvid || '')
   })
 
   // layout
@@ -68,6 +71,14 @@ export default function SearchVideo() {
               onSearch={(v) => setState({ text: v })}
               style={{ transform: `translateY(${isNotNil(videoInfo) ? 0 : 0.2 * (winSize?.height || 768)}px)` }}
             />
+
+            {invalidBVID && (
+              <UEmpty
+                style={{ transform: `translateY(${isNotNil(videoInfo) ? 0 : 0.2 * (winSize?.height || 768)}px)` }}
+              >
+                视频地址不对劲
+              </UEmpty>
+            )}
           </div>
 
           {!!videoInfo && (

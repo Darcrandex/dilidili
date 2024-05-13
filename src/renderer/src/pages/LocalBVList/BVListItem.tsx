@@ -56,9 +56,9 @@ export default function BVListItem(props: BVListItemProps) {
 
   return (
     <>
-      <article className={cls('group relative space-y-2', props.className)}>
+      <article className={cls('group relative', props.className)}>
         <UImage
-          className='h-36 rounded-md cursor-pointer hover:opacity-80 hover:shadow-xl transition-all'
+          className='h-36 mb-2 rounded-md cursor-pointer hover:opacity-75 hover:drop-shadow-xl transition-all'
           src={info.pic}
           onClick={openVideo}
         />
@@ -70,13 +70,15 @@ export default function BVListItem(props: BVListItemProps) {
         <div className='h-12 leading-6 text-sm overflow-clip'>{info.title}</div>
 
         <div className='flex items-center justify-between'>
-          <label
-            className='text-xs text-gray-400 hover:text-primary transition-colors cursor-pointer'
-            onClick={() => ipcActions.openInBrowser(`https://space.bilibili.com/${info?.owner.mid}`)}
-          >
+          <label className='text-xs text-gray-400'>
             {props.showUpName !== false && (
               <>
-                <span>{info.owner.name}</span>
+                <span
+                  className='inline-block hover:text-primary transition-colors cursor-pointer'
+                  onClick={() => ipcActions.openInBrowser(`https://space.bilibili.com/${info?.owner.mid}`)}
+                >
+                  {info.owner.name}
+                </span>
                 <b className='inline-block mx-2'>·</b>
               </>
             )}
