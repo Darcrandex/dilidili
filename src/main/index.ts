@@ -18,8 +18,12 @@ import { registerWindowControlHandler } from './handlers/win-ctl'
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 800,
+    height: 640,
+    minWidth: 800,
+    minHeight: 640,
+
+    title: 'dilidili',
     show: false,
     frame: false, // 直接隐藏顶部标题栏
     autoHideMenuBar: true,
