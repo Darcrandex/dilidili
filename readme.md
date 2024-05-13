@@ -1,10 +1,24 @@
 <p align="center">
   <img alt="dilidili" src="resources/icon.png" width="100" />
 </p>
-
 <h1 align="center">bilibli + download = dilidili</h1>
 
 > 一个下载哔哩哔哩 BV 视频的工具
+
+## 预览
+
+<p align="center">
+  <img alt="dilidili" src="docs/screenshot/1.png" />
+</p>
+<p align="center">
+  <img alt="dilidili" src="docs/screenshot/2.png" />
+</p>
+<p align="center">
+  <img alt="dilidili" src="docs/screenshot/3.png" />
+</p>
+<p align="center">
+  <img alt="dilidili" src="docs/screenshot/4.png" />
+</p>
 
 > 参考
 >
