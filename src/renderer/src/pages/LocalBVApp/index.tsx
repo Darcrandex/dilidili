@@ -5,7 +5,6 @@
  */
 
 import { fsService } from '@renderer/services/fs'
-import UScrollView from '@renderer/ui/UScrollView'
 import { cls } from '@renderer/utils/cls'
 import { useQuery } from '@tanstack/react-query'
 import { Avatar } from 'antd'
@@ -22,20 +21,18 @@ export default function LocalBVApp() {
     <>
       <section className='flex-1 flex h-full'>
         <aside className='w-40 border-r overflow-auto'>
-          <UScrollView className='h-full'>
-            <NavLink
-              className={cls(
-                'flex items-center space-x-2 m-2 p-2 rounded-md transition-all',
-                isAll ? 'bg-slate-100' : 'hover:bg-slate-50'
-              )}
-              to=''
-            >
-              <Avatar className='w-8 h-8'>all</Avatar>
-              <span className='truncate text-sm'>全部UP主</span>
-            </NavLink>
+          <NavLink
+            className={cls(
+              'flex items-center space-x-2 m-2 p-2 rounded-md transition-all',
+              isAll ? 'bg-slate-100' : 'hover:bg-slate-50'
+            )}
+            to=''
+          >
+            <Avatar className='w-8 h-8'>all</Avatar>
+            <span className='truncate text-sm'>全部UP主</span>
+          </NavLink>
 
-            {allUps?.map((v) => <UpItem key={v.mid} mid={v.mid} />)}
-          </UScrollView>
+          {allUps?.map((v) => <UpItem key={v.mid} mid={v.mid} />)}
         </aside>
 
         <main className='flex-1 overflow-auto'>
