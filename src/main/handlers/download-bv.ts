@@ -174,5 +174,5 @@ const taskModel = {
   }
 }
 
-const stepDelay = async (delay: number = 200): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, delay + Math.random() * 500))
+const stepDelay = async (delay: number = 100): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, delay + Math.random() * 200))
