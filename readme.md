@@ -5,6 +5,12 @@
 
 > 一个下载哔哩哔哩 BV 视频的工具
 
+## tauri 版本
+
+当前项目已使用 tauri 进行重构，新项目地址 [dilidili-tauri](https://github.com/Darcrandex/dilidili-tauri)
+
+tauri 版本将拥有更小的体积，更高的性能
+
 ## 预览
 
 <p align="center">
